@@ -14,7 +14,7 @@ Metadata:
       - Label: 
           default: "Liquibase Configuration"
         Parameters: 
-          - S3Bucket
+          - S3BucketName
           - LiquibaseProKey
       - Label: 
           default: Network configuration
@@ -31,7 +31,7 @@ Metadata:
           - DatabaseUsernameProd
           - DatabasePasswordProd
     ParameterLabels:
-      S3Bucket:
+      S3BucketName:
         default: Name of S3 Bucket housing Liquibase project files
       VPCID:
         default: VPC ID
@@ -72,7 +72,7 @@ Parameters:
     Default: liquibase-pro-sample
     Description: Define the Name of the Project such as test/data etc. (Value must be comprised only of lowercase a-z, 0-9, .-)
     Type: String
-  S3Bucket:
+  S3BucketName:
     Description: Define the Name of the S3 Bucket containing CodeCommit contents
     Type: String
   VPCID:
@@ -91,8 +91,8 @@ Resources:
       Code:
         BranchName: main
         S3: 
-          Bucket: !Ref 'S3Bucket'
-          Key: 'codebuild-cs-demo-project.zip'
+          Bucket: !Ref 'S3BucketName'
+          Key: !Sub '${S3KeyPrefix}lambda_functions/packages/codecommit/lambda.zip'
       RepositoryDescription: !Sub ${ProjectName}CodeRepo
       RepositoryName: !Sub ${ProjectName}coderepo
   CodeBuildImageRole:
@@ -136,7 +136,7 @@ Resources:
       Artifacts:
           ArtifactIdentifier: String
           EncryptionDisabled: false
-          Location: !Ref 'S3Bucket'
+          Location: !Ref 'S3BucketName'
           Name: codebuild-snapshot.zip
           NamespaceType: NONE
           OverrideArtifactName: true
@@ -259,7 +259,7 @@ Resources:
       Type: AWS::CodePipeline::Pipeline
       Properties: 
           ArtifactStore: 
-            Location: !Ref 'S3Bucket'
+            Location: !Ref 'S3BucketName'
             Type: S3
           Name: !Sub '${ProjectName}-CodePipeline'
           RoleArn: !GetAtt 
