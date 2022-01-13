@@ -28,7 +28,7 @@ project:
   template: templates/liquibase-pro.template
   parameters:
     ProjectName:
-    S3Bucket:
+    S3BucketName:
     LiquibaseProKey:
     VPCID:
     DBSubnetGroupName: 
