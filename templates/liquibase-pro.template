@@ -92,7 +92,7 @@ Resources:
         BranchName: main
         S3: 
           Bucket: !Ref 'S3BucketName'
-          Key: 'quickstart-liquibase-pro/lambda_functions/packages/codecommit/lambda.zip'
+          Key: 'quickstart-liquibase-pro/packages/codecommit/lambda.zip'
       RepositoryDescription: !Sub ${ProjectName}CodeRepo
       RepositoryName: !Sub ${ProjectName}coderepo
   CodeBuildImageRole:
