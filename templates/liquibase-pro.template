@@ -20,7 +20,8 @@ Metadata:
           default: Network configuration
         Parameters: 
           - VPCID
-          - DBSubnetGroupName
+          - PrivateSubnet01
+          - PrivateSubnet02
       - Label:
           default: "Database Configuration"
         Parameters:
@@ -36,9 +37,6 @@ Metadata:
       VPCID:
         default: VPC ID
 Parameters:
-  DBSubnetGroupName:
-    Description: A DB subnet group to associate with the DB instance. 
-    Type: String
   LiquibaseProKey:
     Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial!
     Type: String
@@ -78,6 +76,14 @@ Parameters:
   VPCID:
     Description: ID of the VPC (e.g., vpc-0343606e).
     Type: 'AWS::EC2::VPC::Id'
+  PrivateSubnet01:
+    Type: 'AWS::EC2::Subnet::Id'
+    Description: The subnet for the DB cluster
+    Default: subnet-ID
+  PrivateSubnet02:
+    Type: 'AWS::EC2::Subnet::Id'
+    Description: The subnet for the DB cluster
+    Default: subnet-ID	
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret
@@ -92,7 +98,8 @@ Resources:
         BranchName: main
         S3: 
           Bucket: !Ref 'S3BucketName'
-          Key: 'quickstart-liquibase-pro/packages/codecommit/lambda.zip'
+#         Key: 'quickstart-liquibase-pro/packages/codecommit/lambda.zip'
+          Key: 'codebuild-cs-demo-project.zip'
       RepositoryDescription: !Sub ${ProjectName}CodeRepo
       RepositoryName: !Sub ${ProjectName}coderepo
   CodeBuildImageRole:
@@ -111,6 +118,7 @@ Resources:
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3ReadOnlyAccess'
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser'
         - !Sub 'arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite'
+        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonEC2FullAccess'
       Path: /
       Policies:
         - PolicyDocument:
@@ -170,6 +178,13 @@ Resources:
       Tags:
         - Key: Project
           Value: !Ref 'ProjectName'
+      VpcConfig: 
+        SecurityGroupIds:
+          - !GetAtt RDSSecurityGroup.GroupId
+        Subnets:
+          - !Ref 'PrivateSubnet01'
+          - !Ref 'PrivateSubnet02'
+        VpcId: !Ref 'VPCID'
   AmazonCloudWatchEventRole:
     Type: 'AWS::IAM::Role'
     Properties:
@@ -379,6 +394,14 @@ Resources:
           IpProtocol: tcp
           ToPort: 5432
       VpcId: !Ref 'VPCID'
+  RDSDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for Postgres Databases
+      DBSubnetGroupName: !Sub "${ProjectName}-database-subnet-group"
+      SubnetIds: 
+        - !Ref PrivateSubnet01
+        - !Ref PrivateSubnet02
   RDSInstanceProd:
     Type: "AWS::RDS::DBInstance"
     Properties:
@@ -390,13 +413,13 @@ Resources:
       DBInstanceIdentifier: !Sub ${ProjectName}-prod
       Engine: postgres
       EngineVersion: '12.5'
-      DBSubnetGroupName: !Ref DBSubnetGroupName
+      DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups: 
       - !GetAtt RDSSecurityGroup.GroupId
       MasterUsername: !Sub ${DatabaseUsernameProd}
       MasterUserPassword: !Sub ${DatabasePasswordProd}
       MonitoringInterval: 0
-      PubliclyAccessible: true
+      PubliclyAccessible: false
       StorageType: gp2
   RDSInstanceStage:
     Type: "AWS::RDS::DBInstance"
@@ -409,13 +432,13 @@ Resources:
       DBInstanceIdentifier: !Sub ${ProjectName}-stage
       Engine: postgres
       EngineVersion: '12.5'
-      DBSubnetGroupName: !Ref DBSubnetGroupName
+      DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups: 
       - !GetAtt RDSSecurityGroup.GroupId
       MasterUsername: !Sub ${DatabaseUsernameStage}
       MasterUserPassword: !Sub ${DatabasePasswordStage}
       MonitoringInterval: 0
-      PubliclyAccessible: true
+      PubliclyAccessible: false
       StorageType: gp2
   RDSInstanceTest:
     Type: "AWS::RDS::DBInstance"
@@ -428,13 +451,13 @@ Resources:
       DBInstanceIdentifier: !Sub ${ProjectName}-test
       Engine: postgres
       EngineVersion: '12.5'
-      DBSubnetGroupName: !Ref DBSubnetGroupName
+      DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups: 
       - !GetAtt RDSSecurityGroup.GroupId
       MasterUsername: !Sub ${DatabaseUsernameTest}
       MasterUserPassword: !Sub ${DatabasePasswordTest}
       MonitoringInterval: 0
-      PubliclyAccessible: true
+      PubliclyAccessible: false
       StorageType: gp2
 Outputs:
   AWSSecrets:
@@ -472,6 +495,11 @@ Outputs:
     Value: !Ref RDSSecurityGroup
     Export:
       Name: !Sub '${ProjectName}-SecurityGroup'
+  RDSDBSubnetGroup:
+    Description: RDS DB Subnet Group.
+    Value: !Ref RDSDBSubnetGroup
+    Export:
+      Name: !Sub '${ProjectName}-DBSubnetGroup'
   RDSInstanceProd:
     Description: RDS Prod Instance name.
     Value: !Ref RDSInstanceProd
