@@ -31,7 +31,8 @@ project:
     S3BucketName: '$[taskcat_autobucket]'
     LiquibaseProKey:
     VPCID:
-    DBSubnetGroupName: 
+    PrivateSubnet01:
+    PrivateSubnet02:
     DatabaseUsernameTest:
     DatabasePasswordTest:
     DatabaseUsernameStage:
