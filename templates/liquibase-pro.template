@@ -258,17 +258,20 @@ Resources:
                   - 'codecommit:GetBranch'
                   - 'codecommit:GetCommit'
                   - 'codecommit:GetUploadArchiveStatus'
-                  - 'codecommit:UploadArchive' 
-                Resource: '*'
+                  - 'codecommit:UploadArchive'
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:codecommit:${AWS::Region}:${AWS::AccountId}:${ProjectName}coderepo'
               - Effect: Allow
                 Action:
                   - 's3:*'
-                Resource: '*'
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:s3:::${S3BucketName}'
               - Effect: Allow
                 Action:
                   - 'codebuild:BatchGetBuilds'
                   - 'codebuild:StartBuild'
-                Resource: '*'
+                Resource:
+                  - !Sub 'arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${ProjectName}-CodeBuild-Job'
       RoleName: !Sub ${ProjectName}-CodePipeline-Role
   CodePipelineImage:    
       Type: AWS::CodePipeline::Pipeline
