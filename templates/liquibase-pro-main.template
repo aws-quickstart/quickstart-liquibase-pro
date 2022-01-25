@@ -26,12 +26,6 @@ Metadata:
         Parameters: 
           - S3BucketName
           - LiquibaseProKey
-      - Label: 
-          default: Network configuration
-        Parameters:
-          - VPCID		
-          - PrivateSubnet01
-          - PrivateSubnet02
       - Label:
           default: "Database Configuration"
         Parameters:
