@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: AWS CloudFormation Template to build a Liquibase Pro project with Code Pipeline in AWS.
+Description: AWS CloudFormation Template to build a Liquibase Pro project with Code Pipeline in AWS. (qs-1smgd1p7g)
 Metadata:
   QuickStartDocumentation:
     EntrypointName: "Launch into a new VPC"
@@ -208,8 +208,8 @@ Resources:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
       TemplateURL: !Sub
-        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/liquibase-pro.template
-#        - https://amy-cloudformation-test-bucket.s3.amazonaws.com/liquibase-pro.template
+#        - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/liquibase-pro.template
+        - https://amy-cloudformation-test-bucket.s3.amazonaws.com/liquibase-pro.template
         - S3Bucket: !If
             - UsingDefaultBucket
             - !Sub 'aws-quickstart-${AWS::Region}'
