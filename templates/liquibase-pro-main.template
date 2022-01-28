@@ -66,7 +66,7 @@ Metadata:
         default: VPC tenancy
 Parameters:
   AvailabilityZones:
-    Description: List of Availability Zones to use for the subnets in the VPC.
+    Description: List of Availability Zones to use for the subnets in the VPC. (Must choose at least 2)
     Type: 'List<AWS::EC2::AvailabilityZone::Name>'
   LiquibaseProKey:
     Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial!
