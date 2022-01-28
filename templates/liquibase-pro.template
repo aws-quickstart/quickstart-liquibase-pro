@@ -31,6 +31,12 @@ Metadata:
           - DatabasePasswordStage
           - DatabaseUsernameProd
           - DatabasePasswordProd
+      - Label:
+          default: AWS Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3KeyPrefix
+          - QSS3BucketRegion
     ParameterLabels:
       S3BucketName:
         default: Name of S3 Bucket housing Liquibase project files
@@ -83,7 +89,44 @@ Parameters:
   PrivateSubnet02:
     Type: 'AWS::EC2::Subnet::Id'
     Description: The subnet for the DB cluster
-    Default: subnet-ID	
+    Default: subnet-ID
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription: The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      hyphen (-).
+    Default: aws-quickstart
+    Description: Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^([0-9a-zA-Z-.]+/)*$
+    ConstraintDescription: The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/).
+    Default: quickstart-linux-bastion/
+    Description: S3 key prefix that is used to simulate a directory for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). End with a forward slash. 
+      See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html.
+    Type: String	
+Conditions:
+  UsingDefaultBucket: !Equals
+    - !Ref QSS3BucketName
+    - 'aws-quickstart'
+  UsingTaskCat: !Equals 
+    - !Ref S3BucketName
+    - $[taskcat_autobucket]
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret
@@ -99,7 +142,12 @@ Resources:
         S3: 
           Bucket: !Ref 'S3BucketName'
 #          Key: 'quickstart-liquibase-pro/packages/codecommit/lambda.zip'
-          Key: 'codebuild-cs-demo-project.zip'
+#          Key: 'codebuild-cs-demo-project.zip'
+          Key:
+            - !If
+              - UsingTaskCat
+              - quickstart-liquibase-pro/packages/codecommit/lambda.zip
+              - codebuild-cs-demo-project.zip		
       RepositoryDescription: !Sub ${ProjectName}CodeRepo
       RepositoryName: !Sub ${ProjectName}coderepo
   CodeBuildImageRole:
