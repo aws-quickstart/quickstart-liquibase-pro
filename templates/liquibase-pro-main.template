@@ -24,7 +24,6 @@ Metadata:
       - Label: 
           default: "Liquibase Configuration"
         Parameters: 
-          - S3BucketName
           - LiquibaseProKey
       - Label:
           default: "Database Configuration"
@@ -50,8 +49,6 @@ Metadata:
         default: Quick Start S3 bucket name
       QSS3KeyPrefix:
         default: Quick Start S3 key prefix
-      S3BucketName:
-        default: Name of S3 Bucket housing Liquibase project files
       PrivateSubnet1CIDR:
         default: Private subnet 1 CIDR
       PrivateSubnet2CIDR:
@@ -124,9 +121,6 @@ Parameters:
     ConstraintDescription: Project Name must contain only lowercase a-z, 0-9 and - characters.
     Default: liquibase-pro-sample
     Description: Define the Name of the Project such as test/data etc. (Value must be comprised only of lowercase a-z, 0-9, .-)
-    Type: String
-  S3BucketName:
-    Description: Define the Name of the S3 Bucket containing CodeCommit contents
     Type: String
   VPCCIDR:
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
@@ -227,7 +221,7 @@ Resources:
         DatabaseUsernameTest: !Ref DatabaseUsernameTest
         DatabasePasswordTest: !Ref DatabasePasswordTest
         ProjectName: !Ref ProjectName
-        S3BucketName: !Ref S3BucketName
+        QSS3BucketName: !Ref QSS3BucketName
         VPCID: !GetAtt 
           - VPCStack
           - Outputs.VPCID
