@@ -34,8 +34,8 @@ Metadata:
           default: AWS Quick Start configuration
         Parameters:
           - QSS3BucketName
-          - QSS3KeyPrefix
-          - QSS3BucketRegion
+#          - QSS3KeyPrefix
+#          - QSS3BucketRegion
     ParameterLabels:
       VPCID:
         default: VPC ID
