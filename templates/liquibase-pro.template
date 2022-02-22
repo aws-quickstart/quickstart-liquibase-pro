@@ -4,15 +4,19 @@ Metadata:
   QuickStartDocumentation:
     EntrypointName: Launch into an existing VPC
     Order: 2
+  LintSpellExclude:
+    - Liquibase
+    - VPC
+    - customizing
   LICENSE: Apache License, Version 2.0
   'AWS::CloudFormation::Interface':
     ParameterGroups: 
       - Label: 
-          default: "Project Configuration"
+          default: "Project configuration"
         Parameters: 
           - ProjectName
       - Label: 
-          default: "Liquibase Configuration"
+          default: "Liquibase configuration"
         Parameters: 
           - LiquibaseProKey
       - Label: 
@@ -22,7 +26,7 @@ Metadata:
           - PrivateSubnet01
           - PrivateSubnet02
       - Label:
-          default: "Database Configuration"
+          default: "Database configuration"
         Parameters:
           - DatabaseUsernameTest
           - DatabasePasswordTest
@@ -37,52 +41,74 @@ Metadata:
 #          - QSS3KeyPrefix
 #          - QSS3BucketRegion
     ParameterLabels:
+      DatabaseUsernameStage:
+	    default: Database username for staging
+      DatabasePasswordStage:
+	    default: Database password for staging
+      DatabaseUsernameTest:
+	    default: Database username for test
+      DatabasePasswordTest:
+	    default: Database password for test
+      DatabaseUsernameProd:
+	    default: Database username for production
+      DatabasePasswordProd:
+	    default: Database password for production
+      LiquibaseProKey:
+	    default: LiquibasePro key
+      PrivateSubnet01:
+	    default: Private subnet 1 ID
+      PrivateSubnet02:
+	    default: Private subnet 2 ID
+      ProjectName:
+	    default: Project name
+      QSS3BucketName:
+        default: Quick Start S3 bucket name 	  
       VPCID:
         default: VPC ID
 Parameters:
   LiquibaseProKey:
-    Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial!
+    Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial.
     Type: String
   DatabaseUsernameProd:
     Default: postgres
-    Description: Database Username for Production
+    Description: Database username for production.
     Type: String
   DatabasePasswordProd:
-    Description: Database Password for Production
+    Description: Database password for production.
     NoEcho: 'true'
     Type: String
   DatabaseUsernameStage:
     Default: postgres
-    Description: Database Username for Staging
+    Description: Database username for staging.
     Type: String
   DatabasePasswordStage:
-    Description: Database Password for Staging
+    Description: Database password for staging.
     NoEcho: 'true'
     Type: String
   DatabaseUsernameTest:
     Default: postgres
-    Description: Database Username for Test
+    Description: Database username for test.
     Type: String
   DatabasePasswordTest:
-    Description: Database Password for Test
+    Description: Database password for test.
     NoEcho: 'true'
     Type: String
   ProjectName:
     AllowedPattern: '[a-z0-9.-]*'
     ConstraintDescription: Project Name must contain only lowercase a-z, 0-9 and - characters.
     Default: liquibase-pro-sample
-    Description: Define the Name of the Project such as test/data etc. (Value must be comprised only of lowercase a-z, 0-9, .-)
+    Description: Define the name of the project such as test/data etc. (Value must be comprised only of lowercase a-z, 0-9, .-).
     Type: String
   VPCID:
     Description: ID of the VPC (e.g., vpc-0343606e).
     Type: 'AWS::EC2::VPC::Id'
   PrivateSubnet01:
     Type: 'AWS::EC2::Subnet::Id'
-    Description: The subnet for the DB cluster
+    Description: The subnet for the DB cluster.
     Default: subnet-ID
   PrivateSubnet02:
     Type: 'AWS::EC2::Subnet::Id'
-    Description: The subnet for the DB cluster
+    Description: The subnet for the DB cluster.
     Default: subnet-ID
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
@@ -114,10 +140,6 @@ Parameters:
 #      See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
 #      and https://aws-quickstart.github.io/option1.html.
 #    Type: String	
-Conditions:
-  UsingDefaultBucket: !Equals
-    - !Ref QSS3BucketName
-    - 'aws-quickstart'
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret
