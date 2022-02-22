@@ -42,25 +42,25 @@ Metadata:
 #          - QSS3BucketRegion
     ParameterLabels:
       DatabaseUsernameStage:
-	    default: Database username for staging
+        default: Database username for staging
       DatabasePasswordStage:
-	    default: Database password for staging
+        default: Database password for staging
       DatabaseUsernameTest:
-	    default: Database username for test
+        default: Database username for test
       DatabasePasswordTest:
-	    default: Database password for test
+        default: Database password for test
       DatabaseUsernameProd:
-	    default: Database username for production
+        default: Database username for production
       DatabasePasswordProd:
-	    default: Database password for production
+        default: Database password for production
       LiquibaseProKey:
-	    default: LiquibasePro key
+        default: LiquibasePro key
       PrivateSubnet01:
-	    default: Private subnet 1 ID
+        default: Private subnet 1 ID
       PrivateSubnet02:
-	    default: Private subnet 2 ID
+        default: Private subnet 2 ID
       ProjectName:
-	    default: Project name
+        default: Project name
       QSS3BucketName:
         default: Quick Start S3 bucket name 	  
       VPCID:

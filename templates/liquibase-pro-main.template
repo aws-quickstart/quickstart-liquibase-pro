@@ -48,19 +48,19 @@ Metadata:
       AvailabilityZones:
         default: Availability Zones
       DatabaseUsernameStage:
-	    default: Database username for staging
+        default: Database username for staging
       DatabasePasswordStage:
-	    default: Database password for staging
+        default: Database password for staging
       DatabaseUsernameTest:
-	    default: Database username for test
+        default: Database username for test
       DatabasePasswordTest:
-	    default: Database password for test
+        default: Database password for test
       DatabaseUsernameProd:
-	    default: Database username for production
+        default: Database username for production
       DatabasePasswordProd:
-	    default: Database password for production
+        default: Database password for production
       LiquibaseProKey:
-	    default: LiquibasePro key
+        default: LiquibasePro key
       QSS3BucketRegion:
         default: Quick Start S3 bucket Region
       QSS3BucketName:
@@ -72,7 +72,7 @@ Metadata:
       PrivateSubnet2CIDR:
         default: Private subnet 2 CIDR
       ProjectName:
-	    default: Project name
+        default: Project name
       PublicSubnet1CIDR:
         default: Public subnet 1 CIDR
       PublicSubnet2CIDR:
