@@ -29,7 +29,7 @@ Metadata:
           default: "Liquibase configuration"
         Parameters: 
           - LiquibaseProKey
-      - Label:Starting DaticalDB REPL
+      - Label:
           default: "Database configuration"
         Parameters:
           - DatabaseUsernameTest
