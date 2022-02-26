@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: AWS CloudFormation Template to build a Liquibase Pro project with Code Pipeline in AWS. (qs-1smgd1p5p)
+Description: AWS CloudFormation Template to build a Liquibase Pro project with AWS CodePipeline in AWS. (qs-1smgd1p5p)
 Metadata:
   QuickStartDocumentation:
     EntrypointName: Launch into an existing VPC
