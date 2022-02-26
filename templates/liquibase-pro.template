@@ -217,7 +217,7 @@ Resources:
           Value: !Ref 'ProjectName'
       VpcConfig: 
         SecurityGroupIds:
-          - !GetAtt RDSSecurityGroup.GroupId
+          - !Ref LambdaSecurityGroup
         Subnets:
           - !Ref 'PrivateSubnet01'
           - !Ref 'PrivateSubnet02'
@@ -427,18 +427,30 @@ Resources:
             Name: Deploy-Prod
   RDSSecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
-    Properties: 
+    Properties:
       GroupDescription: !Sub ${ProjectName}-SecurityGroup for RDS
-      GroupName: !Sub ${ProjectName}-SecurityGroup
-      SecurityGroupEgress: 
-        - CidrIp: 0.0.0.0/0
-          IpProtocol: '-1' 
-      SecurityGroupIngress: 
-        - CidrIp: 0.0.0.0/0
-          FromPort: 5432
-          IpProtocol: tcp
-          ToPort: 5432
+      GroupName: !Sub ${ProjectName}-RDSSecurityGroup
       VpcId: !Ref 'VPCID'
+  RDSSecurityGroupIngress:
+    Type: "AWS::EC2::SecurityGroupIngress"
+    Properties:
+      GroupId: !Ref RDSSecurityGroup
+      IpProtocol: tcp
+      FromPort: 5432
+      ToPort: 5432
+      SourceSecurityGroupId: !Ref LambdaSecurityGroup
+  LambdaSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: !Sub ${ProjectName}-SecurityGroup for Lambda
+      GroupName: !Sub ${ProjectName}-LambdaSecurityGroup
+      VpcId: !Ref 'VPCID'
+  LambdaSecurityGroupEgress:
+    Type: "AWS::EC2::SecurityGroupEgress"
+    Properties:
+      GroupId: !Ref LambdaSecurityGroup
+      IpProtocol: '-1'
+      CidrIp: 0.0.0.0/0
   RDSDBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
@@ -535,11 +547,16 @@ Outputs:
     Value: !Ref CodePipelineImage
     Export:
       Name: !Sub '${ProjectName}-CodePipeline'
+  LambdaSecurityGroup:
+    Description: Lambda Security Group name.
+    Value: !Ref LambdaSecurityGroup
+    Export:
+      Name: !Sub '${ProjectName}-LambdaSecurityGroup'
   RDSSecurityGroup:
     Description: RDS Security Group name.
     Value: !Ref RDSSecurityGroup
     Export:
-      Name: !Sub '${ProjectName}-SecurityGroup'
+      Name: !Sub '${ProjectName}-RDSSecurityGroup'
   RDSDBSubnetGroup:
     Description: RDS DB Subnet Group.
     Value: !Ref RDSDBSubnetGroup

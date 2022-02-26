@@ -223,7 +223,6 @@ Resources:
     Properties:
       TemplateURL: !Sub
         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/liquibase-pro.template
-#        - https://amy-cloudformation-test-bucket.s3.amazonaws.com/liquibase-pro.template
         - S3Bucket: !If
             - UsingDefaultBucket
             - !Sub 'aws-quickstart-${AWS::Region}'
