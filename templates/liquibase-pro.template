@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
 Description: AWS CloudFormation Template to build a Liquibase Pro project with AWS CodePipeline in AWS. (qs-1smgd1p5p)
 Metadata:
   QuickStartDocumentation:
@@ -9,15 +9,15 @@ Metadata:
   SentenceCaseExclude:
     - Pro
   LICENSE: Apache License, Version 2.0
-  'AWS::CloudFormation::Interface':
+  AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-          default: "Project configuration"
-        Parameters: 
+          default: Project configuration
+        Parameters:
           - ProjectName
       - Label:
-          default: "Liquibase configuration"
-        Parameters: 
+          default: Liquibase configuration
+        Parameters:
           - LiquibaseProKey
       - Label:
           default: Network configuration
@@ -26,7 +26,7 @@ Metadata:
           - PrivateSubnet01
           - PrivateSubnet02
       - Label:
-          default: "Database configuration"
+          default: Database configuration
         Parameters:
           - DatabaseUsernameTest
           - DatabasePasswordTest
@@ -73,7 +73,7 @@ Parameters:
     Type: String
   DatabasePasswordProd:
     Description: Database password for production.
-    NoEcho: 'true'
+    NoEcho: true
     Type: String
   DatabaseUsernameStage:
     Default: postgres
@@ -81,7 +81,7 @@ Parameters:
     Type: String
   DatabasePasswordStage:
     Description: Database password for staging.
-    NoEcho: 'true'
+    NoEcho: true
     Type: String
   DatabaseUsernameTest:
     Default: postgres
@@ -89,28 +89,29 @@ Parameters:
     Type: String
   DatabasePasswordTest:
     Description: Database password for test.
-    NoEcho: 'true'
+    NoEcho: true
     Type: String
   ProjectName:
-    AllowedPattern: '[a-z0-9.-]*'
+    AllowedPattern: "[a-z0-9.-]*"
     ConstraintDescription: Project Name must contain only lowercase a-z, 0-9 and - characters.
     Default: liquibase-pro-sample
     Description: Define the name of the project such as test/data etc. (Value must be comprised only of lowercase a-z, 0-9, .-).
     Type: String
   VPCID:
     Description: ID of the VPC (e.g., vpc-0343606e).
-    Type: 'AWS::EC2::VPC::Id'
+    Type: AWS::EC2::VPC::Id
   PrivateSubnet01:
-    Type: 'AWS::EC2::Subnet::Id'
+    Type: AWS::EC2::Subnet::Id
     Description: The subnet for the DB cluster.
     Default: subnet-ID
   PrivateSubnet02:
-    Type: 'AWS::EC2::Subnet::Id'
+    Type: AWS::EC2::Subnet::Id
     Description: The subnet for the DB cluster.
     Default: subnet-ID
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: The Quick Start bucket name can include numbers, lowercase
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a
       hyphen (-).
     Default: aws-quickstart
@@ -134,8 +135,8 @@ Resources:
       Code:
         BranchName: main
         S3:
-          Bucket: !Ref 'QSS3BucketName'
-          Key: 'quickstart-liquibase-pro/packages/codecommit/lambda.zip'
+          Bucket: !Ref QSS3BucketName
+          Key: quickstart-liquibase-pro/packages/codecommit/lambda.zip
 #          Key: 'codebuild-cs-demo-project.zip'
       RepositoryDescription: !Sub ${ProjectName}CodeRepo
       RepositoryName: !Sub ${ProjectName}coderepo
@@ -149,13 +150,13 @@ Resources:
             Principal:
               Service:
                 - codebuild.amazonaws.com
-        Version: '2012-10-17'
+        Version: 2012-10-17
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AWSCodeCommitReadOnly'
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonS3ReadOnlyAccess'
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser'
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite'
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/AmazonEC2FullAccess'
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AWSCodeCommitReadOnly
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonS3ReadOnlyAccess
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonEC2ContainerRegistryPowerUser
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/SecretsManagerReadWrite
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonEC2FullAccess
       Path: /
       Policies:
         - PolicyDocument:
@@ -168,8 +169,8 @@ Resources:
                   - logs:PutLogEvents
                 Effect: Allow
                 Resource:
-                  - !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:*'
-            Version: '2012-10-17'
+                  - !Sub arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:*
+            Version: 2012-10-17
           PolicyName: !Sub
             - ${Param1}-RolePolicy
             - Param1: !Sub ${ProjectName}-CodeBuild-ContainerImage
@@ -181,7 +182,7 @@ Resources:
       Artifacts:
           ArtifactIdentifier: String
           EncryptionDisabled: false
-          Location: !Ref 'QSS3BucketName'
+          Location: !Ref QSS3BucketName
           Name: codebuild-snapshot.zip
           NamespaceType: NONE
           OverrideArtifactName: true
@@ -202,7 +203,7 @@ Resources:
         S3Logs:
           EncryptionDisabled: false
           Status: DISABLED
-      Name: !Sub '${ProjectName}-CodeBuild-Job'
+      Name: !Sub ${ProjectName}-CodeBuild-Job
       ServiceRole: !Sub ${ProjectName}-CodeBuild-Role
       Source:
         GitCloneDepth: 1
@@ -214,16 +215,16 @@ Resources:
       SourceVersion: refs/heads/main
       Tags:
         - Key: Project
-          Value: !Ref 'ProjectName'
+          Value: !Ref ProjectName
       VpcConfig:
         SecurityGroupIds:
           - !Ref LambdaSecurityGroup
         Subnets:
-          - !Ref 'PrivateSubnet01'
-          - !Ref 'PrivateSubnet02'
-        VpcId: !Ref 'VPCID'
+          - !Ref PrivateSubnet01
+          - !Ref PrivateSubnet02
+        VpcId: !Ref VPCID
   AmazonCloudWatchEventRole:
-    Type: 'AWS::IAM::Role'
+    Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Version: 2012-10-17
@@ -232,10 +233,10 @@ Resources:
             Principal:
               Service:
                 - events.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: sts:AssumeRole
       Path: /
   AmazonCloudWatchEventRule:
-    Type: 'AWS::Events::Rule'
+    Type: AWS::Events::Rule
     Properties:
       EventPattern:
         source:
@@ -281,7 +282,7 @@ Resources:
             Effect: Allow
             Principal:
               Service: codepipeline.amazonaws.com
-        Version: '2012-10-17'
+        Version: 2012-10-17
       MaxSessionDuration: 3600
       Path: /
       Policies:
@@ -291,37 +292,37 @@ Resources:
             Statement:
               - Effect: Allow
                 Action:
-                  - 'codecommit:CancelUploadArchive'
-                  - 'codecommit:GetBranch'
-                  - 'codecommit:GetCommit'
-                  - 'codecommit:GetUploadArchiveStatus'
-                  - 'codecommit:UploadArchive'
+                  - codecommit:CancelUploadArchive
+                  - codecommit:GetBranch
+                  - codecommit:GetCommit
+                  - codecommit:GetUploadArchiveStatus
+                  - codecommit:UploadArchive
                 Resource:
-                  - !Sub 'arn:${AWS::Partition}:codecommit:${AWS::Region}:${AWS::AccountId}:${ProjectName}coderepo'
+                  - !Sub arn:${AWS::Partition}:codecommit:${AWS::Region}:${AWS::AccountId}:${ProjectName}coderepo
               - Effect: Allow
                 Action:
-                  - 's3:GetObject'
-                  - 's3:GetObjectVersion'
-                  - 's3:GetBucketVersioning'
-                  - 's3:PutObjectAcl'
-                  - 's3:PutObject'
+                  - s3:GetObject
+                  - s3:GetObjectVersion
+                  - s3:GetBucketVersioning
+                  - s3:PutObjectAcl
+                  - s3:PutObject
                 Resource:
-                  - !Sub 'arn:${AWS::Partition}:s3:::${QSS3BucketName}'
-                  - !Sub 'arn:${AWS::Partition}:s3:::${QSS3BucketName}/*'
+                  - !Sub arn:${AWS::Partition}:s3:::${QSS3BucketName}
+                  - !Sub arn:${AWS::Partition}:s3:::${QSS3BucketName}/*
               - Effect: Allow
                 Action:
-                  - 'codebuild:BatchGetBuilds'
-                  - 'codebuild:StartBuild'
+                  - codebuild:BatchGetBuilds
+                  - codebuild:StartBuild
                 Resource:
-                  - !Sub 'arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${ProjectName}-CodeBuild-Job'
+                  - !Sub arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${ProjectName}-CodeBuild-Job
       RoleName: !Sub ${ProjectName}-CodePipeline-Role
   CodePipelineImage:
       Type: AWS::CodePipeline::Pipeline
       Properties:
           ArtifactStore:
-            Location: !Ref 'QSS3BucketName'
+            Location: !Ref QSS3BucketName
             Type: S3
-          Name: !Sub '${ProjectName}-CodePipeline'
+          Name: !Sub ${ProjectName}-CodePipeline
           RoleArn: !GetAtt
             - CodePipelineServiceRole
             - Arn
@@ -331,18 +332,18 @@ Resources:
                 Category: Source
                 Owner: AWS
                 Provider: CodeCommit
-                Version: '1'
+                Version: 1
               Configuration:
                 BranchName: main
                 OutputArtifactFormat: CODE_ZIP
-                PollForSourceChanges: 'false'
+                PollForSourceChanges: false
                 RepositoryName: !Sub ${ProjectName}coderepo
               InputArtifacts: []
               Name: Source
               Namespace: SourceVariables
               OutputArtifacts:
               - Name: SourceArtifact
-              Region: !Ref 'AWS::Region'
+              Region: !Ref AWS::Region
               RunOrder: 1
             Name: Source
           - Actions:
@@ -350,17 +351,15 @@ Resources:
                 Category: Build
                 Owner: AWS
                 Provider: CodeBuild
-                Version: '1'
+                Version: 1
               Configuration:
-                EnvironmentVariables: !Sub 
-                - '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${Endpoint}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_TEST","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_TEST","type":"SECRETS_MANAGER"}]'
-                - { Endpoint: !GetAtt RDSInstanceTest.Endpoint.Address }
-                ProjectName: !Sub '${ProjectName}-CodeBuild-Job'
+                EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceTest.Endpoint.Address}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_TEST","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_TEST","type":"SECRETS_MANAGER"}]'
+                ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
               - Name: SourceArtifact
               Name: Build
               OutputArtifacts: []
-              Region: !Ref 'AWS::Region'
+              Region: !Ref AWS::Region
               RunOrder: 1
             Name: Build
           - Actions:
@@ -368,12 +367,12 @@ Resources:
                 Category: Approval
                 Owner: AWS
                 Provider: Manual
-                Version: '1'
+                Version: 1
               Configuration: {}
               InputArtifacts: []
               Name: Approval-Stage
               OutputArtifacts: []
-              Region: !Ref 'AWS::Region'
+              Region: !Ref AWS::Region
               RunOrder: 1
             Name: Approval-Stage
           - Actions:
@@ -381,17 +380,17 @@ Resources:
                 Category: Build
                 Owner: AWS
                 Provider: CodeBuild
-                Version: '1'
+                Version: 1
               Configuration:
                 EnvironmentVariables: !Sub 
                 - '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${Endpoint}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_STAGE","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_STAGE","type":"SECRETS_MANAGER"}]'
                 - { Endpoint: !GetAtt RDSInstanceStage.Endpoint.Address }
-                ProjectName: !Sub '${ProjectName}-CodeBuild-Job'
+                ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
               - Name: SourceArtifact
               Name: Deploy-Stage
               OutputArtifacts: []
-              Region: !Ref 'AWS::Region'
+              Region: !Ref AWS::Region
               RunOrder: 1
             Name: Deploy-Stage
           - Actions:
@@ -399,12 +398,12 @@ Resources:
                 Category: Approval
                 Owner: AWS
                 Provider: Manual
-                Version: '1'
+                Version: 1
               Configuration: {}
               InputArtifacts: []
               Name: Approval-Prod
               OutputArtifacts: []
-              Region: !Ref 'AWS::Region'
+              Region: !Ref AWS::Region
               RunOrder: 1
             Name: Approval-Prod
           - Actions:
@@ -412,27 +411,27 @@ Resources:
                 Category: Build
                 Owner: AWS
                 Provider: CodeBuild
-                Version: '1'
+                Version: 1
               Configuration:
                 EnvironmentVariables: !Sub 
                 - '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${Endpoint}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_PROD","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_PROD","type":"SECRETS_MANAGER"}]'
                 - { Endpoint: !GetAtt RDSInstanceProd.Endpoint.Address }
-                ProjectName: !Sub '${ProjectName}-CodeBuild-Job'
+                ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
               - Name: SourceArtifact
               Name: Deploy-Prod
               OutputArtifacts: []
-              Region: !Ref 'AWS::Region'
+              Region: !Ref AWS::Region
               RunOrder: 1
             Name: Deploy-Prod
   RDSSecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: !Sub ${ProjectName}-SecurityGroup for RDS
       GroupName: !Sub ${ProjectName}-RDSSecurityGroup
-      VpcId: !Ref 'VPCID'
+      VpcId: !Ref VPCID
   RDSSecurityGroupIngress:
-    Type: "AWS::EC2::SecurityGroupIngress"
+    Type: AWS::EC2::SecurityGroupIngress
     Properties:
       GroupId: !Ref RDSSecurityGroup
       IpProtocol: tcp
@@ -440,27 +439,27 @@ Resources:
       ToPort: 5432
       SourceSecurityGroupId: !Ref LambdaSecurityGroup
   LambdaSecurityGroup:
-    Type: "AWS::EC2::SecurityGroup"
+    Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: !Sub ${ProjectName}-SecurityGroup for Lambda
       GroupName: !Sub ${ProjectName}-LambdaSecurityGroup
-      VpcId: !Ref 'VPCID'
+      VpcId: !Ref VPCID
   LambdaSecurityGroupEgress:
-    Type: "AWS::EC2::SecurityGroupEgress"
+    Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId: !Ref LambdaSecurityGroup
-      IpProtocol: '-1'
+      IpProtocol: -1
       CidrIp: 0.0.0.0/0
   RDSDBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
     Properties:
       DBSubnetGroupDescription: Subnet group for Postgres Databases
-      DBSubnetGroupName: !Sub "${ProjectName}-database-subnet-group"
+      DBSubnetGroupName: !Sub ${ProjectName}-database-subnet-group
       SubnetIds:
         - !Ref PrivateSubnet01
         - !Ref PrivateSubnet02
   RDSInstanceProd:
-    Type: "AWS::RDS::DBInstance"
+    Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 20
       AutoMinorVersionUpgrade: true
@@ -469,17 +468,17 @@ Resources:
       DBInstanceClass: db.t2.micro
       DBInstanceIdentifier: !Sub ${ProjectName}-prod
       Engine: postgres
-      EngineVersion: '12.5'
+      EngineVersion: 12.5
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups:
-      - !GetAtt RDSSecurityGroup.GroupId
+      - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameProd}
       MasterUserPassword: !Sub ${DatabasePasswordProd}
       MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: gp2
   RDSInstanceStage:
-    Type: "AWS::RDS::DBInstance"
+    Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 20
       AutoMinorVersionUpgrade: true
@@ -488,17 +487,17 @@ Resources:
       DBInstanceClass: db.t2.micro
       DBInstanceIdentifier: !Sub ${ProjectName}-stage
       Engine: postgres
-      EngineVersion: '12.5'
+      EngineVersion: 12.5
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups:
-      - !GetAtt RDSSecurityGroup.GroupId
+      - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameStage}
       MasterUserPassword: !Sub ${DatabasePasswordStage}
       MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: gp2
   RDSInstanceTest:
-    Type: "AWS::RDS::DBInstance"
+    Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 20
       AutoMinorVersionUpgrade: true
@@ -507,10 +506,10 @@ Resources:
       DBInstanceClass: db.t2.micro
       DBInstanceIdentifier: !Sub ${ProjectName}-test
       Engine: postgres
-      EngineVersion: '12.5'
+      EngineVersion: 12.5
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups:
-      - !GetAtt RDSSecurityGroup.GroupId
+      - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameTest}
       MasterUserPassword: !Sub ${DatabasePasswordTest}
       MonitoringInterval: 0
@@ -521,59 +520,59 @@ Outputs:
     Description: AWS secrets for project.
     Value: !Ref AWSSecrets
     Export:
-      Name: 'LIQUIBASEPRO-DEMO'
+      Name: LIQUIBASEPRO-DEMO
   CodeCommitRepository:
     Description: Code Commmit Repository for housing LiquibasePro project.
     Value: !Ref CodeCommitRepository
     Export:
-      Name: !Sub '${ProjectName}coderepo'
+      Name: !Sub ${ProjectName}coderepo
   CodeBuildImageRole:
     Description: Code Build Image role name.
     Value: !Ref CodeBuildImageRole
     Export:
-      Name: !Sub '${ProjectName}-CodeBuild-Role'
+      Name: !Sub ${ProjectName}-CodeBuild-Role
   CodeBuildImageJob:
     Description: Code Build Image job name.
     Value: !Ref CodeBuildImageJob
     Export:
-      Name: !Sub '${ProjectName}-CodeBuild-Job'
+      Name: !Sub ${ProjectName}-CodeBuild-Job
   CodePipelineServiceRole:
     Description: Code Pipeline Service Role.
     Value: !Ref CodePipelineServiceRole
     Export:
-      Name: !Sub '${ProjectName}-CodePipeline-Role'
+      Name: !Sub ${ProjectName}-CodePipeline-Role
   CodePipelineImage:
     Description: Code Pipeline Image name.
     Value: !Ref CodePipelineImage
     Export:
-      Name: !Sub '${ProjectName}-CodePipeline'
+      Name: !Sub ${ProjectName}-CodePipeline
   LambdaSecurityGroup:
     Description: Lambda Security Group name.
     Value: !Ref LambdaSecurityGroup
     Export:
-      Name: !Sub '${ProjectName}-LambdaSecurityGroup'
+      Name: !Sub ${ProjectName}-LambdaSecurityGroup
   RDSSecurityGroup:
     Description: RDS Security Group name.
     Value: !Ref RDSSecurityGroup
     Export:
-      Name: !Sub '${ProjectName}-RDSSecurityGroup'
+      Name: !Sub ${ProjectName}-RDSSecurityGroup
   RDSDBSubnetGroup:
     Description: RDS DB Subnet Group.
     Value: !Ref RDSDBSubnetGroup
     Export:
-      Name: !Sub '${ProjectName}-DBSubnetGroup'
+      Name: !Sub ${ProjectName}-DBSubnetGroup
   RDSInstanceProd:
     Description: RDS Prod Instance name.
     Value: !Ref RDSInstanceProd
     Export:
-      Name: !Sub '${ProjectName}-prod'
+      Name: !Sub ${ProjectName}-prod
   RDSInstanceStage:
     Description: RDS Stage Instance name.
     Value: !Ref RDSInstanceStage
     Export:
-      Name: !Sub '${ProjectName}-stage'
+      Name: !Sub ${ProjectName}-stage
   RDSInstanceTest:
     Description: RDS Test Instance name.
     Value: !Ref RDSInstanceTest
     Export:
-      Name: !Sub '${ProjectName}-test'
+      Name: !Sub ${ProjectName}-test
