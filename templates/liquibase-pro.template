@@ -178,15 +178,15 @@ Resources:
     DependsOn: CodeBuildImageRole
     Properties:
       Artifacts:
-          ArtifactIdentifier: String
-          EncryptionDisabled: false
-          Location: !Ref QSS3BucketName
-          Name: codebuild-snapshot.zip
-          NamespaceType: NONE
-          OverrideArtifactName: true
-          Packaging: ZIP
-          Path: ''
-          Type: S3
+        ArtifactIdentifier: String
+        EncryptionDisabled: false
+        Location: !Ref QSS3BucketName
+        Name: codebuild-snapshot.zip
+        NamespaceType: NONE
+        OverrideArtifactName: true
+        Packaging: ZIP
+        Path: ""
+        Type: S3
       Description: CodeBuild Project to pull from a GIT repository containing
         Liquibase project and a "buildspec.yml" file.
       Environment:
@@ -299,15 +299,15 @@ Resources:
                   - !Sub arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${ProjectName}-CodeBuild-Job
       RoleName: !Sub ${ProjectName}-CodePipeline-Role
   CodePipelineImage:
-      Type: AWS::CodePipeline::Pipeline
-      Properties:
-          ArtifactStore:
-            Location: !Ref QSS3BucketName
-            Type: S3
-          Name: !Sub ${ProjectName}-CodePipeline
-          RoleArn: !GetAtt CodePipelineServiceRole.Arn
-          Stages:
-          - Actions:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      ArtifactStore:
+        Location: !Ref QSS3BucketName
+        Type: S3
+      Name: !Sub ${ProjectName}-CodePipeline
+      RoleArn: !GetAtt CodePipelineServiceRole.Arn
+      Stages:
+        - Actions:
             - ActionTypeId:
                 Category: Source
                 Owner: AWS
@@ -322,11 +322,11 @@ Resources:
               Name: Source
               Namespace: SourceVariables
               OutputArtifacts:
-              - Name: SourceArtifact
+                - Name: SourceArtifact
               Region: !Ref AWS::Region
               RunOrder: 1
-            Name: Source
-          - Actions:
+          Name: Source
+        - Actions:
             - ActionTypeId:
                 Category: Build
                 Owner: AWS
@@ -336,13 +336,13 @@ Resources:
                 EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceTest.Endpoint.Address}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_TEST","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_TEST","type":"SECRETS_MANAGER"}]'
                 ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
-              - Name: SourceArtifact
+                - Name: SourceArtifact
               Name: Build
               OutputArtifacts: []
               Region: !Ref AWS::Region
               RunOrder: 1
-            Name: Build
-          - Actions:
+          Name: Build
+        - Actions:
             - ActionTypeId:
                 Category: Approval
                 Owner: AWS
@@ -354,8 +354,8 @@ Resources:
               OutputArtifacts: []
               Region: !Ref AWS::Region
               RunOrder: 1
-            Name: Approval-Stage
-          - Actions:
+          Name: Approval-Stage
+        - Actions:
             - ActionTypeId:
                 Category: Build
                 Owner: AWS
@@ -365,13 +365,13 @@ Resources:
                 EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceStage.Endpoint.Address}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_STAGE","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_STAGE","type":"SECRETS_MANAGER"}]'
                 ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
-              - Name: SourceArtifact
+                - Name: SourceArtifact
               Name: Deploy-Stage
               OutputArtifacts: []
               Region: !Ref AWS::Region
               RunOrder: 1
-            Name: Deploy-Stage
-          - Actions:
+          Name: Deploy-Stage
+        - Actions:
             - ActionTypeId:
                 Category: Approval
                 Owner: AWS
@@ -383,8 +383,8 @@ Resources:
               OutputArtifacts: []
               Region: !Ref AWS::Region
               RunOrder: 1
-            Name: Approval-Prod
-          - Actions:
+          Name: Approval-Prod
+        - Actions:
             - ActionTypeId:
                 Category: Build
                 Owner: AWS
@@ -394,12 +394,12 @@ Resources:
                 EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceProd.Endpoint.Address}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_PROD","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_PROD","type":"SECRETS_MANAGER"}]'
                 ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
-              - Name: SourceArtifact
+                - Name: SourceArtifact
               Name: Deploy-Prod
               OutputArtifacts: []
               Region: !Ref AWS::Region
               RunOrder: 1
-            Name: Deploy-Prod
+          Name: Deploy-Prod
   RDSSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -439,7 +439,7 @@ Resources:
     Properties:
       AllocatedStorage: 20
       AutoMinorVersionUpgrade: true
-      BackupRetentionPeriod:  7
+      BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
       DBInstanceClass: db.t2.micro
       DBInstanceIdentifier: !Sub ${ProjectName}-prod
@@ -447,7 +447,7 @@ Resources:
       EngineVersion: 12.5
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups:
-      - !Ref RDSSecurityGroup
+        - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameProd}
       MasterUserPassword: !Sub ${DatabasePasswordProd}
       MonitoringInterval: 0
@@ -458,7 +458,7 @@ Resources:
     Properties:
       AllocatedStorage: 20
       AutoMinorVersionUpgrade: true
-      BackupRetentionPeriod:  7
+      BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
       DBInstanceClass: db.t2.micro
       DBInstanceIdentifier: !Sub ${ProjectName}-stage
@@ -466,7 +466,7 @@ Resources:
       EngineVersion: 12.5
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups:
-      - !Ref RDSSecurityGroup
+        - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameStage}
       MasterUserPassword: !Sub ${DatabasePasswordStage}
       MonitoringInterval: 0
@@ -477,7 +477,7 @@ Resources:
     Properties:
       AllocatedStorage: 20
       AutoMinorVersionUpgrade: true
-      BackupRetentionPeriod:  7
+      BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
       DBInstanceClass: db.t2.micro
       DBInstanceIdentifier: !Sub ${ProjectName}-test
@@ -485,7 +485,7 @@ Resources:
       EngineVersion: 12.5
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
       VPCSecurityGroups:
-      - !Ref RDSSecurityGroup
+        - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameTest}
       MasterUserPassword: !Sub ${DatabasePasswordTest}
       MonitoringInterval: 0
