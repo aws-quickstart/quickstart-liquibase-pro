@@ -10,18 +10,18 @@ Metadata:
     - Pro
   LICENSE: Apache License, Version 2.0
   'AWS::CloudFormation::Interface':
-    ParameterGroups: 
-      - Label: 
+    ParameterGroups:
+      - Label:
           default: "Project configuration"
         Parameters: 
           - ProjectName
-      - Label: 
+      - Label:
           default: "Liquibase configuration"
         Parameters: 
           - LiquibaseProKey
-      - Label: 
+      - Label:
           default: Network configuration
-        Parameters: 
+        Parameters:
           - VPCID
           - PrivateSubnet01
           - PrivateSubnet02
@@ -60,7 +60,7 @@ Metadata:
       ProjectName:
         default: Project name
       QSS3BucketName:
-        default: Quick Start S3 bucket name 	  
+        default: Quick Start S3 bucket name
       VPCID:
         default: VPC ID
 Parameters:
@@ -111,16 +111,16 @@ Parameters:
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription: The Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a
       hyphen (-).
     Default: aws-quickstart
-    Description: Name of the S3 bucket for your copy of the Quick Start assets. 
-      Keep the default name unless you are customizing the template. 
-      Changing the name updates code references to point to a new Quick 
-      Start location. This name can include numbers, lowercase letters, 
-      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+    Description: Name of the S3 bucket for your copy of the Quick Start assets.
+      Keep the default name unless you are customizing the template.
+      Changing the name updates code references to point to a new Quick
+      Start location. This name can include numbers, lowercase letters,
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-).
       See https://aws-quickstart.github.io/option1.html.
-    Type: String	
+    Type: String
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret
@@ -133,7 +133,7 @@ Resources:
     Properties:
       Code:
         BranchName: main
-        S3: 
+        S3:
           Bucket: !Ref 'QSS3BucketName'
           Key: 'quickstart-liquibase-pro/packages/codecommit/lambda.zip'
 #          Key: 'codebuild-cs-demo-project.zip'
@@ -197,25 +197,25 @@ Resources:
         PrivilegedMode: true
         Type: LINUX_CONTAINER
       LogsConfig:
-          CloudWatchLogs: 
-              Status: ENABLED
-          S3Logs: 
-              EncryptionDisabled: false
-              Status: DISABLED            
+        CloudWatchLogs:
+          Status: ENABLED
+        S3Logs:
+          EncryptionDisabled: false
+          Status: DISABLED
       Name: !Sub '${ProjectName}-CodeBuild-Job'
       ServiceRole: !Sub ${ProjectName}-CodeBuild-Role
       Source:
         GitCloneDepth: 1
-        GitSubmodulesConfig: 
+        GitSubmodulesConfig:
           FetchSubmodules: false
         InsecureSsl: false
         Location: !GetAtt CodeCommitRepository.CloneUrlHttp
         Type: CODECOMMIT
-      SourceVersion: refs/heads/main         
+      SourceVersion: refs/heads/main
       Tags:
         - Key: Project
           Value: !Ref 'ProjectName'
-      VpcConfig: 
+      VpcConfig:
         SecurityGroupIds:
           - !Ref LambdaSecurityGroup
         Subnets:
@@ -315,14 +315,14 @@ Resources:
                 Resource:
                   - !Sub 'arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${ProjectName}-CodeBuild-Job'
       RoleName: !Sub ${ProjectName}-CodePipeline-Role
-  CodePipelineImage:    
+  CodePipelineImage:
       Type: AWS::CodePipeline::Pipeline
-      Properties: 
-          ArtifactStore: 
+      Properties:
+          ArtifactStore:
             Location: !Ref 'QSS3BucketName'
             Type: S3
           Name: !Sub '${ProjectName}-CodePipeline'
-          RoleArn: !GetAtt 
+          RoleArn: !GetAtt
             - CodePipelineServiceRole
             - Arn
           Stages:
@@ -456,7 +456,7 @@ Resources:
     Properties:
       DBSubnetGroupDescription: Subnet group for Postgres Databases
       DBSubnetGroupName: !Sub "${ProjectName}-database-subnet-group"
-      SubnetIds: 
+      SubnetIds:
         - !Ref PrivateSubnet01
         - !Ref PrivateSubnet02
   RDSInstanceProd:
@@ -471,7 +471,7 @@ Resources:
       Engine: postgres
       EngineVersion: '12.5'
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
-      VPCSecurityGroups: 
+      VPCSecurityGroups:
       - !GetAtt RDSSecurityGroup.GroupId
       MasterUsername: !Sub ${DatabaseUsernameProd}
       MasterUserPassword: !Sub ${DatabasePasswordProd}
@@ -490,7 +490,7 @@ Resources:
       Engine: postgres
       EngineVersion: '12.5'
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
-      VPCSecurityGroups: 
+      VPCSecurityGroups:
       - !GetAtt RDSSecurityGroup.GroupId
       MasterUsername: !Sub ${DatabaseUsernameStage}
       MasterUserPassword: !Sub ${DatabasePasswordStage}
@@ -509,7 +509,7 @@ Resources:
       Engine: postgres
       EngineVersion: '12.5'
       DBSubnetGroupName: !Ref RDSDBSubnetGroup
-      VPCSecurityGroups: 
+      VPCSecurityGroups:
       - !GetAtt RDSSecurityGroup.GroupId
       MasterUsername: !Sub ${DatabaseUsernameTest}
       MasterUserPassword: !Sub ${DatabasePasswordTest}
