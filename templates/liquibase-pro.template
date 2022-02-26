@@ -6,6 +6,8 @@ Metadata:
     Order: 2
   LintSpellExclude:
     - Liquibase
+  SentenceCaseExclude:
+    - Pro
   LICENSE: Apache License, Version 2.0
   'AWS::CloudFormation::Interface':
     ParameterGroups: 
