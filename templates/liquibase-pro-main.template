@@ -244,15 +244,9 @@ Resources:
         DatabasePasswordTest: !Ref DatabasePasswordTest
         ProjectName: !Ref ProjectName
         QSS3BucketName: !Ref QSS3BucketName
-        VPCID: !GetAtt
-          - VPCStack
-          - Outputs.VPCID
-        PrivateSubnet01: !GetAtt
-          - VPCStack
-          - Outputs.PrivateSubnet1AID
-        PrivateSubnet02: !GetAtt
-          - VPCStack
-          - Outputs.PrivateSubnet2AID
+        VPCID: !GetAtt VPCStack.Outputs.VPCID
+        PrivateSubnet01: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
+        PrivateSubnet02: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
 Outputs:
   Postdeployment:
     Description: See the deployment guide for post-deployment steps.
