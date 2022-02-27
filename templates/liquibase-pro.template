@@ -37,6 +37,7 @@ Metadata:
           - DatabasePasswordStage
           - DatabaseUsernameProd
           - DatabasePasswordProd
+          - DatabaseInstanceClass
       - Label:
           default: AWS Quick Start configuration
         Parameters:
@@ -54,6 +55,8 @@ Metadata:
         default: Database username for Production
       DatabasePasswordProd:
         default: Database password for Production
+      DatabaseInstanceClass:
+        default: Database instance class
       LiquibaseProKey:
         default: Liquibase Pro key
       PrivateSubnet01:
@@ -119,7 +122,10 @@ Parameters:
     AllowedPattern: ^[^/'\"@]+$
     ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
     NoEcho: true
+  DatabaseInstanceClass:
+    Description: Database instance class.
     Type: String
+    Default: db.t2.micro
   ProjectName:
     Description: Project name. Used in resource names and descriptions.
     Type: String
@@ -482,7 +488,7 @@ Resources:
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
-      DBInstanceClass: db.t2.micro
+      DBInstanceClass: !Ref DatabaseInstanceClass
       DBInstanceIdentifier: !Sub ${ProjectName}-prod
       Engine: postgres
       EngineVersion: 12.5
@@ -501,7 +507,7 @@ Resources:
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
-      DBInstanceClass: db.t2.micro
+      DBInstanceClass: !Ref DatabaseInstanceClass
       DBInstanceIdentifier: !Sub ${ProjectName}-stage
       Engine: postgres
       EngineVersion: 12.5
@@ -520,7 +526,7 @@ Resources:
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
-      DBInstanceClass: db.t2.micro
+      DBInstanceClass: !Ref DatabaseInstanceClass
       DBInstanceIdentifier: !Sub ${ProjectName}-test
       Engine: postgres
       EngineVersion: 12.5
