@@ -413,6 +413,15 @@ Resources:
       FromPort: 5432
       ToPort: 5432
       SourceSecurityGroupId: !Ref LambdaSecurityGroup
+  RDSSecurityGroupEgress:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId: !Ref RDSSecurityGroup
+      Description: Placeholder rule to disable CloudFormation default open outbound/egress
+      IpProtocol: icmp
+      FromPort: 8
+      ToPort: 8
+      CidrIp: 127.0.0.1/32
   LambdaSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
