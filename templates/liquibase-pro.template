@@ -132,20 +132,14 @@ Parameters:
     Description: ID of the VPC (e.g., vpc-0343606e).
     Type: AWS::EC2::VPC::Id
   PrivateSubnet01:
-    Type: AWS::EC2::Subnet::Id
     Description: The subnet for the DB cluster.
+    Type: AWS::EC2::Subnet::Id
     Default: subnet-ID
   PrivateSubnet02:
-    Type: AWS::EC2::Subnet::Id
     Description: The subnet for the DB cluster.
+    Type: AWS::EC2::Subnet::Id
     Default: subnet-ID
   QSS3BucketName:
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription:
-      The Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, and hyphens (-). It cannot start or end with a
-      hyphen (-).
-    Default: aws-quickstart
     Description: Name of the S3 bucket for your copy of the Quick Start assets.
       Keep the default name unless you are customizing the template.
       Changing the name updates code references to point to a new Quick
@@ -153,6 +147,14 @@ Parameters:
       uppercase letters, and hyphens, but do not start or end with a hyphen (-).
       See https://aws-quickstart.github.io/option1.html.
     Type: String
+    MinLength: 3
+    MaxLength: 63
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a
+      hyphen (-).
+    Default: aws-quickstart
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret
