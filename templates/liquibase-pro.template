@@ -40,6 +40,7 @@ Metadata:
           - DatabaseInstanceClass
           - DatabaseEngineVersion
           - DatabasePort
+          - DatabaseStorageType
       - Label:
           default: AWS Quick Start configuration
         Parameters:
@@ -63,6 +64,8 @@ Metadata:
         default: Database engine version
       DatabasePort:
         default: Database TCP listening port
+      DatabaseStorageType:
+        default: Database storage type
       LiquibaseProKey:
         default: Liquibase Pro key
       PrivateSubnet01:
@@ -142,6 +145,10 @@ Parameters:
     MinValue: 1150
     MaxValue: 65535
     Default: 5432
+  DatabaseStorageType:
+    Description: Database storage type.
+    Type: String
+    Default: gp2
   ProjectName:
     Description: Project name. Used in resource names and descriptions.
     Type: String
@@ -515,7 +522,7 @@ Resources:
       MasterUserPassword: !Sub ${DatabasePasswordProd}
       MonitoringInterval: 0
       PubliclyAccessible: false
-      StorageType: gp2
+      StorageType: !Ref DatabaseStorageType
       Port: !Ref DatabasePort
   RDSInstanceStage:
     Type: AWS::RDS::DBInstance
@@ -535,7 +542,7 @@ Resources:
       MasterUserPassword: !Sub ${DatabasePasswordStage}
       MonitoringInterval: 0
       PubliclyAccessible: false
-      StorageType: gp2
+      StorageType: !Ref DatabaseStorageType
       Port: !Ref DatabasePort
   RDSInstanceTest:
     Type: AWS::RDS::DBInstance
@@ -555,7 +562,7 @@ Resources:
       MasterUserPassword: !Sub ${DatabasePasswordTest}
       MonitoringInterval: 0
       PubliclyAccessible: false
-      StorageType: gp2
+      StorageType: !Ref DatabaseStorageType
       Port: !Ref DatabasePort
 Outputs:
   AWSSecrets:
