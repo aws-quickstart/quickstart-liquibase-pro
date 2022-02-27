@@ -536,7 +536,6 @@ Resources:
         - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameProd}
       MasterUserPassword: !Sub ${DatabasePasswordProd}
-      MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: !Ref DatabaseStorageType
       Port: !Ref DatabasePort
@@ -556,7 +555,6 @@ Resources:
         - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameStage}
       MasterUserPassword: !Sub ${DatabasePasswordStage}
-      MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: !Ref DatabaseStorageType
       Port: !Ref DatabasePort
@@ -576,7 +574,6 @@ Resources:
         - !Ref RDSSecurityGroup
       MasterUsername: !Sub ${DatabaseUsernameTest}
       MasterUserPassword: !Sub ${DatabasePasswordTest}
-      MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: !Ref DatabaseStorageType
       Port: !Ref DatabasePort
