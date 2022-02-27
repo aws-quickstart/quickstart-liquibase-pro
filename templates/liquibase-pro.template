@@ -96,11 +96,13 @@ Parameters:
     NoEcho: true
     Type: String
   ProjectName:
-    AllowedPattern: "[a-z0-9.-]*"
-    ConstraintDescription: Project Name must contain only lowercase a-z, 0-9 and - characters.
-    Default: liquibase-pro-sample
-    Description: Define the name of the project such as test/data etc. (Value must be comprised only of lowercase a-z, 0-9, .-).
+    Description: Project name. Used in resource names and descriptions.
     Type: String
+    MinLength: 1
+    MaxLength: 48
+    AllowedPattern: ^[a-z][a-z0-9-]*$
+    ConstraintDescription: 1 to 48 lowercase alphanumeric characters and hyphens (-). First character must be a letter.
+    Default: liquibase-pro-sample
   VPCID:
     Description: ID of the VPC (e.g., vpc-0343606e).
     Type: AWS::EC2::VPC::Id
