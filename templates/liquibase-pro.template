@@ -42,6 +42,7 @@ Metadata:
           - DatabasePort
           - DatabaseStorageType
           - DatabaseAllocatedStorage
+          - DatabaseBackupRetentionPeriod
       - Label:
           default: AWS Quick Start configuration
         Parameters:
@@ -69,6 +70,8 @@ Metadata:
         default: Database storage type
       DatabaseAllocatedStorage:
         default: Database allocated storage
+      DatabaseBackupRetentionPeriod:
+        default: Database backup retention period
       LiquibaseProKey:
         default: Liquibase Pro key
       PrivateSubnet01:
@@ -158,6 +161,10 @@ Parameters:
     MinValue: 20
     MaxValue: 65536
     Default: 20
+  DatabaseBackupRetentionPeriod:
+    Description: Database backup retention period.
+    Type: Number
+    Default: 7
   ProjectName:
     Description: Project name. Used in resource names and descriptions.
     Type: String
@@ -518,7 +525,7 @@ Resources:
     Properties:
       AllocatedStorage: !Ref DatabaseAllocatedStorage
       AutoMinorVersionUpgrade: true
-      BackupRetentionPeriod: 7
+      BackupRetentionPeriod: !Ref DatabaseBackupRetentionPeriod
       CopyTagsToSnapshot: true
       DBInstanceClass: !Ref DatabaseInstanceClass
       DBInstanceIdentifier: !Sub ${ProjectName}-prod
@@ -538,7 +545,7 @@ Resources:
     Properties:
       AllocatedStorage: !Ref DatabaseAllocatedStorage
       AutoMinorVersionUpgrade: true
-      BackupRetentionPeriod: 7
+      BackupRetentionPeriod: !Ref DatabaseBackupRetentionPeriod
       CopyTagsToSnapshot: true
       DBInstanceClass: !Ref DatabaseInstanceClass
       DBInstanceIdentifier: !Sub ${ProjectName}-stage
@@ -558,7 +565,7 @@ Resources:
     Properties:
       AllocatedStorage: !Ref DatabaseAllocatedStorage
       AutoMinorVersionUpgrade: true
-      BackupRetentionPeriod: 7
+      BackupRetentionPeriod: !Ref DatabaseBackupRetentionPeriod
       CopyTagsToSnapshot: true
       DBInstanceClass: !Ref DatabaseInstanceClass
       DBInstanceIdentifier: !Sub ${ProjectName}-test
