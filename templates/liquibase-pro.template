@@ -74,26 +74,50 @@ Parameters:
   DatabaseUsernameProd:
     Description: Database username for Production.
     Type: String
+    MinLength: 1
+    MaxLength: 16
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
+    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
     Default: postgres
   DatabasePasswordProd:
     Description: Database password for Production.
     Type: String
+    MinLength: 8
+    MaxLength: 128
+    AllowedPattern: ^[^/'\"@]+$
+    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
     NoEcho: true
   DatabaseUsernameStage:
     Description: Database username for Staging.
     Type: String
+    MinLength: 1
+    MaxLength: 16
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
+    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
     Default: postgres
   DatabasePasswordStage:
     Description: Database password for Staging.
     Type: String
+    MinLength: 8
+    MaxLength: 128
+    AllowedPattern: ^[^/'\"@]+$
+    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
     NoEcho: true
   DatabaseUsernameTest:
     Description: Database username for Test.
     Type: String
+    MinLength: 1
+    MaxLength: 16
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
+    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
     Default: postgres
   DatabasePasswordTest:
     Description: Database password for Test.
     Type: String
+    MinLength: 8
+    MaxLength: 128
+    AllowedPattern: ^[^/'\"@]+$
+    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
     NoEcho: true
     Type: String
   ProjectName:
