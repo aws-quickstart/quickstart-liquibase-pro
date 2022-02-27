@@ -39,6 +39,7 @@ Metadata:
           - DatabasePasswordProd
           - DatabaseInstanceClass
           - DatabaseEngineVersion
+          - DatabasePort
       - Label:
           default: AWS Quick Start configuration
         Parameters:
@@ -60,6 +61,8 @@ Metadata:
         default: Database instance class
       DatabaseEngineVersion:
         default: Database engine version
+      DatabasePort:
+        default: Database TCP listening port
       LiquibaseProKey:
         default: Liquibase Pro key
       PrivateSubnet01:
@@ -133,6 +136,12 @@ Parameters:
     Description: Database engine version.
     Type: String
     Default: 12.5
+  DatabasePort:
+    Description: Database TCP listening port.
+    Type: Number
+    MinValue: 1150
+    MaxValue: 65535
+    Default: 5432
   ProjectName:
     Description: Project name. Used in resource names and descriptions.
     Type: String
@@ -378,7 +387,7 @@ Resources:
                 Provider: CodeBuild
                 Version: 1
               Configuration:
-                EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceTest.Endpoint.Address}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_TEST","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_TEST","type":"SECRETS_MANAGER"}]'
+                EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceTest.Endpoint.Address}:${DatabasePort}/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_TEST","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_TEST","type":"SECRETS_MANAGER"}]'
                 ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
                 - Name: SourceArtifact
@@ -407,7 +416,7 @@ Resources:
                 Provider: CodeBuild
                 Version: 1
               Configuration:
-                EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceStage.Endpoint.Address}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_STAGE","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_STAGE","type":"SECRETS_MANAGER"}]'
+                EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceStage.Endpoint.Address}:${DatabasePort}/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_STAGE","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_STAGE","type":"SECRETS_MANAGER"}]'
                 ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
                 - Name: SourceArtifact
@@ -436,7 +445,7 @@ Resources:
                 Provider: CodeBuild
                 Version: 1
               Configuration:
-                EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceProd.Endpoint.Address}:5432/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_PROD","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_PROD","type":"SECRETS_MANAGER"}]'
+                EnvironmentVariables: !Sub '[{"name":"LIQUIBASE_COMMAND_URL","value":"jdbc:postgresql://${RDSInstanceProd.Endpoint.Address}:${DatabasePort}/postgres","type":"PLAINTEXT"},{"name":"LIQUIBASE_COMMAND_USERNAME","value":"LIQUIBASEPRO-DEMO:USERNAME_PROD","type":"SECRETS_MANAGER"},{"name":"LIQUIBASE_COMMAND_PASSWORD","value":"LIQUIBASEPRO-DEMO:PASSWORD_PROD","type":"SECRETS_MANAGER"}]'
                 ProjectName: !Sub ${ProjectName}-CodeBuild-Job
               InputArtifacts:
                 - Name: SourceArtifact
@@ -456,8 +465,8 @@ Resources:
     Properties:
       GroupId: !Ref RDSSecurityGroup
       IpProtocol: tcp
-      FromPort: 5432
-      ToPort: 5432
+      FromPort: !Ref DatabasePort
+      ToPort: !Ref DatabasePort
       SourceSecurityGroupId: !Ref LambdaSecurityGroup
   RDSSecurityGroupEgress:
     Type: AWS::EC2::SecurityGroupEgress
@@ -507,6 +516,7 @@ Resources:
       MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: gp2
+      Port: !Ref DatabasePort
   RDSInstanceStage:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -526,6 +536,7 @@ Resources:
       MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: gp2
+      Port: !Ref DatabasePort
   RDSInstanceTest:
     Type: AWS::RDS::DBInstance
     Properties:
@@ -545,6 +556,7 @@ Resources:
       MonitoringInterval: 0
       PubliclyAccessible: false
       StorageType: gp2
+      Port: !Ref DatabasePort
 Outputs:
   AWSSecrets:
     Description: AWS secrets for project.
