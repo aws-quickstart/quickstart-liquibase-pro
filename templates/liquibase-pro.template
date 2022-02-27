@@ -41,6 +41,7 @@ Metadata:
           - DatabaseEngineVersion
           - DatabasePort
           - DatabaseStorageType
+          - DatabaseAllocatedStorage
       - Label:
           default: AWS Quick Start configuration
         Parameters:
@@ -66,6 +67,8 @@ Metadata:
         default: Database TCP listening port
       DatabaseStorageType:
         default: Database storage type
+      DatabaseAllocatedStorage:
+        default: Database allocated storage
       LiquibaseProKey:
         default: Liquibase Pro key
       PrivateSubnet01:
@@ -149,6 +152,12 @@ Parameters:
     Description: Database storage type.
     Type: String
     Default: gp2
+  DatabaseAllocatedStorage:
+    Description: Database allocated storage.
+    Type: Number
+    MinValue: 20
+    MaxValue: 65536
+    Default: 20
   ProjectName:
     Description: Project name. Used in resource names and descriptions.
     Type: String
@@ -507,7 +516,7 @@ Resources:
   RDSInstanceProd:
     Type: AWS::RDS::DBInstance
     Properties:
-      AllocatedStorage: 20
+      AllocatedStorage: !Ref DatabaseAllocatedStorage
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
@@ -527,7 +536,7 @@ Resources:
   RDSInstanceStage:
     Type: AWS::RDS::DBInstance
     Properties:
-      AllocatedStorage: 20
+      AllocatedStorage: !Ref DatabaseAllocatedStorage
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
@@ -547,7 +556,7 @@ Resources:
   RDSInstanceTest:
     Type: AWS::RDS::DBInstance
     Properties:
-      AllocatedStorage: 20
+      AllocatedStorage: !Ref DatabaseAllocatedStorage
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 7
       CopyTagsToSnapshot: true
