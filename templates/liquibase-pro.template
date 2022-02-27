@@ -70,6 +70,7 @@ Parameters:
   LiquibaseProKey:
     Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial.
     Type: String
+    NoEcho: true
   DatabaseUsernameProd:
     Description: Database username for Production.
     Type: String
