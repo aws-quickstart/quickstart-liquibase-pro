@@ -8,6 +8,9 @@ Metadata:
     - Liquibase
   SentenceCaseExclude:
     - Pro
+    - Production
+    - Staging
+    - Test
   LICENSE: Apache License, Version 2.0
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -40,19 +43,19 @@ Metadata:
           - QSS3BucketName
     ParameterLabels:
       DatabaseUsernameStage:
-        default: Database username for staging
+        default: Database username for Staging
       DatabasePasswordStage:
-        default: Database password for staging
+        default: Database password for Staging
       DatabaseUsernameTest:
-        default: Database username for test
+        default: Database username for Test
       DatabasePasswordTest:
-        default: Database password for test
+        default: Database password for Test
       DatabaseUsernameProd:
-        default: Database username for production
+        default: Database username for Production
       DatabasePasswordProd:
-        default: Database password for production
+        default: Database password for Production
       LiquibaseProKey:
-        default: LiquibasePro key
+        default: Liquibase Pro key
       PrivateSubnet01:
         default: Private subnet 1 ID
       PrivateSubnet02:
@@ -68,27 +71,28 @@ Parameters:
     Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial.
     Type: String
   DatabaseUsernameProd:
-    Default: postgres
-    Description: Database username for production.
+    Description: Database username for Production.
     Type: String
+    Default: postgres
   DatabasePasswordProd:
-    Description: Database password for production.
-    NoEcho: true
+    Description: Database password for Production.
     Type: String
+    NoEcho: true
   DatabaseUsernameStage:
-    Default: postgres
-    Description: Database username for staging.
+    Description: Database username for Staging.
     Type: String
+    Default: postgres
   DatabasePasswordStage:
-    Description: Database password for staging.
+    Description: Database password for Staging.
+    Type: String
     NoEcho: true
-    Type: String
   DatabaseUsernameTest:
-    Default: postgres
-    Description: Database username for test.
+    Description: Database username for Test.
     Type: String
+    Default: postgres
   DatabasePasswordTest:
-    Description: Database password for test.
+    Description: Database password for Test.
+    Type: String
     NoEcho: true
     Type: String
   ProjectName:
@@ -506,7 +510,7 @@ Outputs:
     Export:
       Name: LIQUIBASEPRO-DEMO
   CodeCommitRepository:
-    Description: Code Commmit Repository for housing LiquibasePro project.
+    Description: Code Commmit Repository for housing Liquibase Pro project.
     Value: !Ref CodeCommitRepository
     Export:
       Name: !Sub ${ProjectName}coderepo
