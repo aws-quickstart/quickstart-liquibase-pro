@@ -302,7 +302,7 @@ Resources:
         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml
         - S3Bucket: !If
             - UsingDefaultBucket
-            - !Sub aws-quickstart-${AWS::Region}
+            - !Sub ${QSS3BucketName}-${AWS::Region}
             - !Ref QSS3BucketName
           S3Region: !If
             - UsingDefaultBucket
@@ -326,7 +326,7 @@ Resources:
         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/liquibase-pro.template
         - S3Bucket: !If
             - UsingDefaultBucket
-            - !Sub aws-quickstart-${AWS::Region}
+            - !Sub ${QSS3BucketName}-${AWS::Region}
             - !Ref QSS3BucketName
           S3Region: !If
             - UsingDefaultBucket
