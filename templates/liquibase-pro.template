@@ -47,6 +47,10 @@ Metadata:
           default: AWS Quick Start configuration
         Parameters:
           - QSS3BucketName
+      - Label:
+          default: Automated testing configuration
+        Parameters:
+          - IsAutomatedTest
     ParameterLabels:
       DatabaseUsernameStage:
         default: Database username for Staging
@@ -84,6 +88,8 @@ Metadata:
         default: Quick Start S3 bucket name
       VPCID:
         default: VPC ID
+      IsAutomatedTest:
+        default: Is this an automated test?
 Parameters:
   LiquibaseProKey:
     Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial.
@@ -200,6 +206,22 @@ Parameters:
       letters, uppercase letters, and hyphens (-). It cannot start or end with a
       hyphen (-).
     Default: aws-quickstart
+  IsAutomatedTest:
+    Description: Enable for automated CI/CD testing to skip deployment of the
+      AWS CodePipeline pipeline and dependent Amazon CloudWatch event rule.
+      This was implemented because 1/ the pipeline includes stages that require
+      manual approval, and 2/ the AWS CodeBuild stages build AWS Lambda
+      functions with elastic network interfaces (ENIs) attached to the
+      LambdaSecurityGroup resource. As of 2022-02-27, when this type of
+      CodeBuild job is interrupted, the ENI is orphaned while still attached to
+      the security group, which will cause stack deletion to fail.
+    Type: String
+    AllowedValues:
+      - "true"
+      - "false"
+    Default: "false"
+Conditions:
+  Deploy: !Not [!Equals [!Ref IsAutomatedTest, "true"]]
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret
@@ -312,6 +334,7 @@ Resources:
       Path: /
   CloudWatchEventRule:
     Type: AWS::Events::Rule
+    Condition: Deploy
     Properties:
       EventPattern:
         source:
@@ -377,6 +400,7 @@ Resources:
       RoleName: !Sub ${ProjectName}-CodePipeline-Role
   CodePipelineImage:
     Type: AWS::CodePipeline::Pipeline
+    Condition: Deploy
     Properties:
       ArtifactStore:
         Location: !Ref QSS3BucketName
@@ -605,6 +629,7 @@ Outputs:
       Name: !Sub ${ProjectName}-CodePipeline-Role
   CodePipelineImage:
     Description: Code Pipeline Image name.
+    Condition: Deploy
     Value: !Ref CodePipelineImage
     Export:
       Name: !Sub ${ProjectName}-CodePipeline
