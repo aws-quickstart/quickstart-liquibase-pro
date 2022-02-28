@@ -8,6 +8,9 @@ Metadata:
     - Liquibase
   SentenceCaseExclude:
     - Pro
+    - Production
+    - Staging
+    - Test
   LICENSE: Apache License, Version 2.0
   AWS::CloudFormation::Interface:
     ParameterGroups:
@@ -38,41 +41,57 @@ Metadata:
           - DatabasePasswordStage
           - DatabaseUsernameProd
           - DatabasePasswordProd
+          - DatabaseInstanceClass
+          - DatabaseEngineVersion
+          - DatabasePort
+          - DatabaseStorageType
+          - DatabaseAllocatedStorage
+          - DatabaseBackupRetentionPeriod
       - Label:
           default: AWS Quick Start configuration
         Parameters:
           - QSS3BucketName
           - QSS3KeyPrefix
           - QSS3BucketRegion
+      - Label:
+          default: Automated testing configuration
+        Parameters:
+          - IsAutomatedTest
     ParameterLabels:
       AvailabilityZones:
         default: Availability Zones
       DatabaseUsernameStage:
-        default: Database username for staging
+        default: Database username for Staging
       DatabasePasswordStage:
-        default: Database password for staging
+        default: Database password for Staging
       DatabaseUsernameTest:
-        default: Database username for test
+        default: Database username for Test
       DatabasePasswordTest:
-        default: Database password for test
+        default: Database password for Test
       DatabaseUsernameProd:
-        default: Database username for production
+        default: Database username for Production
       DatabasePasswordProd:
-        default: Database password for production
+        default: Database password for Production
+      DatabaseInstanceClass:
+        default: Database instance class
+      DatabaseEngineVersion:
+        default: Database engine version
+      DatabasePort:
+        default: Database TCP listening port
+      DatabaseStorageType:
+        default: Database storage type
+      DatabaseAllocatedStorage:
+        default: Database allocated storage
+      DatabaseBackupRetentionPeriod:
+        default: Database backup retention period
       LiquibaseProKey:
-        default: LiquibasePro key
-      QSS3BucketRegion:
-        default: Quick Start S3 bucket Region
-      QSS3BucketName:
-        default: Quick Start S3 bucket name
-      QSS3KeyPrefix:
-        default: Quick Start S3 key prefix
+        default: Liquibase Pro key
+      ProjectName:
+        default: Project name
       PrivateSubnet1CIDR:
         default: Private subnet 1 CIDR
       PrivateSubnet2CIDR:
         default: Private subnet 2 CIDR
-      ProjectName:
-        default: Project name
       PublicSubnet1CIDR:
         default: Public subnet 1 CIDR
       PublicSubnet2CIDR:
@@ -81,6 +100,14 @@ Metadata:
         default: VPC CIDR
       VPCTenancy:
         default: VPC tenancy
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket Region
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
+      IsAutomatedTest:
+        default: Is this an automated test?
 Parameters:
   AvailabilityZones:
     Description: List of Availability Zones to use for the subnets in the VPC. (Must choose at least 2).
@@ -88,80 +115,129 @@ Parameters:
   LiquibaseProKey:
     Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial.
     Type: String
+    NoEcho: true
   DatabaseUsernameProd:
-    Default: postgres
-    Description: Database username for production.
+    Description: Database username for Production.
     Type: String
+    MinLength: 1
+    MaxLength: 16
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
+    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
+    Default: postgres
   DatabasePasswordProd:
-    Description: Database password for production.
-    NoEcho: true
+    Description: Database password for Production.
     Type: String
+    MinLength: 8
+    MaxLength: 128
+    AllowedPattern: ^[^/'\"@]+$
+    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
+    NoEcho: true
   DatabaseUsernameStage:
-    Default: postgres
-    Description: Database username for staging.
+    Description: Database username for Staging.
     Type: String
+    MinLength: 1
+    MaxLength: 16
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
+    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
+    Default: postgres
   DatabasePasswordStage:
-    Description: Database password for staging.
-    NoEcho: true
+    Description: Database password for Staging.
     Type: String
+    MinLength: 8
+    MaxLength: 128
+    AllowedPattern: ^[^/'\"@]+$
+    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
+    NoEcho: true
   DatabaseUsernameTest:
+    Description: Database username for Test.
+    Type: String
+    MinLength: 1
+    MaxLength: 16
+    AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
+    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
     Default: postgres
-    Description: Database username for test.
-    Type: String
   DatabasePasswordTest:
-    Description: Database password for test.
-    NoEcho: true
+    Description: Database password for Test.
     Type: String
+    MinLength: 8
+    MaxLength: 128
+    AllowedPattern: ^[^/'\"@]+$
+    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
+    NoEcho: true
+  DatabaseInstanceClass:
+    Description: Database instance class.
+    Type: String
+    Default: db.t2.micro
+  DatabaseEngineVersion:
+    Description: Database engine version.
+    Type: String
+    Default: 12.5
+  DatabasePort:
+    Description: Database TCP listening port.
+    Type: Number
+    MinValue: 1150
+    MaxValue: 65535
+    Default: 5432
+  DatabaseStorageType:
+    Description: Database storage type.
+    Type: String
+    Default: gp2
+  DatabaseAllocatedStorage:
+    Description: Database allocated storage.
+    Type: Number
+    MinValue: 20
+    MaxValue: 65536
+    Default: 20
+  DatabaseBackupRetentionPeriod:
+    Description: Database backup retention period.
+    Type: Number
+    Default: 7
+  ProjectName:
+    Description: Project name. Used in resource names and descriptions.
+    Type: String
+    MinLength: 1
+    MaxLength: 48
+    AllowedPattern: ^[a-z][a-z0-9-]*$
+    ConstraintDescription: 1 to 48 lowercase alphanumeric characters and hyphens (-). First character must be a letter.
+    Default: liquibase-pro-sample
   PrivateSubnet1CIDR:
+    Description: CIDR block for private subnet 1, located in Availability Zone 1.
+    Type: String
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.0.0/19
-    Description: CIDR block for private subnet 1, located in Availability Zone 1.
-    Type: String
   PrivateSubnet2CIDR:
+    Description: CIDR block for private subnet 2, located in Availability Zone 2.
+    Type: String
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.32.0/19
-    Description: CIDR block for private subnet 2, located in Availability Zone 2.
-    Type: String
   PublicSubnet1CIDR:
+    Description: CIDR block for the public DMZ subnet 1, located in Availability Zone 1.
+    Type: String
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.128.0/20
-    Description: CIDR block for the public DMZ subnet 1, located in Availability Zone 1.
-    Type: String
   PublicSubnet2CIDR:
+    Description: CIDR block for the public DMZ subnet 2, located in Availability Zone 2.
+    Type: String
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.144.0/20
-    Description: CIDR block for the public DMZ subnet 2, located in Availability Zone 2.
-    Type: String
-  ProjectName:
-    AllowedPattern: "[a-z0-9.-]*"
-    ConstraintDescription: Project Name must contain only lowercase a-z, 0-9 and - characters.
-    Default: liquibase-pro-sample
-    Description: Define the name of the project such as test/data etc. (Value must be comprised only of lowercase a-z, 0-9, .-).
-    Type: String
   VPCCIDR:
+    Description: CIDR block for the VPC.
+    Type: String
     AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
     ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
     Default: 10.0.0.0/16
-    Description: CIDR block for the VPC.
-    Type: String
   VPCTenancy:
+    Description: The allowed tenancy of instances launched into the VPC.
+    Type: String
     AllowedValues:
       - default
       - dedicated
     Default: default
-    Description: The allowed tenancy of instances launched into the VPC.
-    Type: String
   QSS3BucketName:
-    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription:
-      The Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, and hyphens (-). It cannot start or end with a
-      hyphen (-).
-    Default: aws-quickstart
     Description: Name of the S3 bucket for your copy of the Quick Start assets.
       Keep the default name unless you are customizing the template.
       Changing the name updates code references to point to a new Quick
@@ -169,12 +245,15 @@ Parameters:
       uppercase letters, and hyphens, but do not start or end with a hyphen (-).
       See https://aws-quickstart.github.io/option1.html.
     Type: String
-  QSS3KeyPrefix:
-    AllowedPattern: ^([0-9a-zA-Z-.]+/)*$
+    MinLength: 3
+    MaxLength: 63
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
     ConstraintDescription:
-      The Quick Start S3 key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slashes (/).
-    Default: quickstart-linux-bastion/
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a
+      hyphen (-).
+    Default: aws-quickstart
+  QSS3KeyPrefix:
     Description:
       S3 key prefix that is used to simulate a directory for your copy of the
       Quick Start assets. Keep the default prefix unless you are customizing
@@ -184,14 +263,33 @@ Parameters:
       See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html
       and https://aws-quickstart.github.io/option1.html.
     Type: String
+    AllowedPattern: ^([0-9a-zA-Z-.]+/)*$
+    ConstraintDescription:
+      The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/).
+    Default: quickstart-liquibase-pro/
   QSS3BucketRegion:
-    Default: us-east-1
     Description: AWS Region where the Quick Start S3 bucket (QSS3BucketName) is
       hosted. Keep the default Region unless you are customizing the template.
       Changing this Region updates code references to point to a new Quick Start location.
       When using your own bucket, specify the Region.
       See https://aws-quickstart.github.io/option1.html.
     Type: String
+    Default: us-east-1
+  IsAutomatedTest:
+    Description: Enable for automated CI/CD testing to skip deployment of the
+      AWS CodePipeline pipeline and dependent Amazon CloudWatch event rule.
+      This was implemented because 1/ the pipeline includes stages that require
+      manual approval, and 2/ the AWS CodeBuild stages build AWS Lambda
+      functions with elastic network interfaces (ENIs) attached to the
+      LambdaSecurityGroup resource. As of 2022-02-27, when this type of
+      CodeBuild job is interrupted, the ENI is orphaned while still attached to
+      the security group, which will cause stack deletion to fail.
+    Type: String
+    AllowedValues:
+      - "true"
+      - "false"
+    Default: "false"
 Conditions:
   UsingDefaultBucket: !Equals
     - !Ref QSS3BucketName
@@ -242,11 +340,18 @@ Resources:
         DatabasePasswordStage: !Ref DatabasePasswordStage
         DatabaseUsernameTest: !Ref DatabaseUsernameTest
         DatabasePasswordTest: !Ref DatabasePasswordTest
+        DatabaseInstanceClass: !Ref DatabaseInstanceClass
+        DatabaseEngineVersion: !Ref DatabaseEngineVersion
+        DatabasePort: !Ref DatabasePort
+        DatabaseStorageType: !Ref DatabaseStorageType
+        DatabaseAllocatedStorage: !Ref DatabaseAllocatedStorage
+        DatabaseBackupRetentionPeriod: !Ref DatabaseBackupRetentionPeriod
         ProjectName: !Ref ProjectName
         QSS3BucketName: !Ref QSS3BucketName
         VPCID: !GetAtt VPCStack.Outputs.VPCID
         PrivateSubnet01: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
         PrivateSubnet02: !GetAtt VPCStack.Outputs.PrivateSubnet2AID
+        IsAutomatedTest: !Ref IsAutomatedTest
 Outputs:
   Postdeployment:
     Description: See the deployment guide for post-deployment steps.
