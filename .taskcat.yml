@@ -33,17 +33,18 @@ project:
   template: templates/liquibase-pro.template
   parameters:
     ProjectName: 
-    QSS3BucketName: '$[taskcat_autobucket]'
+    QSS3BucketName: $[taskcat_autobucket]
     LiquibaseProKey:
     VPCID:
     PrivateSubnet01:
     PrivateSubnet02:
-    DatabaseUsernameTest:
-    DatabasePasswordTest:
-    DatabaseUsernameStage:
-    DatabasePasswordStage:
-    DatabaseUsernameProd:
-    DatabasePasswordProd:
+    DatabaseUsernameTest: a
+    DatabasePasswordTest: $[taskcat_genpass_8A]
+    DatabaseUsernameStage: $[taskcat_genpass_8A]
+    DatabasePasswordStage: $[taskcat_genpass_68A]
+    DatabaseUsernameProd: $[taskcat_genpass_16A]
+    DatabasePasswordProd: $[taskcat_genpass_128A]
+    IsAutomatedTest: "true"
 tests:
   default:
     template: templates/liquibase-pro.template
