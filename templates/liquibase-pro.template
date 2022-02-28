@@ -298,7 +298,7 @@ Resources:
           - !Ref PrivateSubnet01
           - !Ref PrivateSubnet02
         VpcId: !Ref VPCID
-  AmazonCloudWatchEventRole:
+  CloudWatchEventRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -310,7 +310,7 @@ Resources:
                 - events.amazonaws.com
             Action: sts:AssumeRole
       Path: /
-  AmazonCloudWatchEventRule:
+  CloudWatchEventRule:
     Type: AWS::Events::Rule
     Properties:
       EventPattern:
@@ -330,7 +330,7 @@ Resources:
             - main
       Targets:
         - Arn: !Sub arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${CodePipelineImage}
-          RoleArn: !GetAtt AmazonCloudWatchEventRole.Arn
+          RoleArn: !GetAtt CloudWatchEventRole.Arn
           Id: codepipeline-CodePipelineImage
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
