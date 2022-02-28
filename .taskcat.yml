@@ -38,7 +38,7 @@ project:
     VPCID:
     PrivateSubnet01:
     PrivateSubnet02:
-    DatabaseUsernameTest: a
+    DatabaseUsernameTest: b
     DatabasePasswordTest: $[taskcat_genpass_8A]
     DatabaseUsernameStage: $[taskcat_genpass_8A]
     DatabasePasswordStage: $[taskcat_genpass_68A]
