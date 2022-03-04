@@ -1,8 +1,6 @@
 :xrefstyle: short
 
-Deploying this Quick Start for a new virtual private cloud (VPC) with
-default parameters builds the following {partner-product-short-name} environment in the
-AWS Cloud.
+Deploy this Quick Start for a new {partner-product-short-name} pipeline with deployments to three AWS RDS PostgreSQL databases. Choose between using an existing virtual private cloud (VPC) or creating a new VPC. The pipeline includes an AWS CodePipeline with AWS CodeBuild Stages with approval gates to deploy a series of scripts using {partner-product-short-name}.
 
 // Replace this example diagram with your own. Follow our wiki guidelines: https://w.amazon.com/bin/view/AWS_Quick_Starts/Process_for_PSAs/#HPrepareyourarchitecturediagram. Upload your source PowerPoint file to the GitHub {deployment name}/docs/images/ directory in this repo. 
 
