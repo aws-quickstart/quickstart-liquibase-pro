@@ -1,7 +1,7 @@
 :quickstart-project-name: quickstart-liquibase-pro
 :quickstart-github-org: aws-quickstart
 :partner-product-name: Liquibase Pro
-:partner-product-short-name: LiquibasePro
+:partner-product-short-name: Liquibase Pro
 :partner-company-name: Liquibase Inc.
 :doc-month: March
 :doc-year: 2022

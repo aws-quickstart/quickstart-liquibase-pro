@@ -2,7 +2,7 @@
 
 This Quick Start provides two deployment options:
 
-* http://qs_launch_permalink[Deploy {partner-product-short-name} into a new VPC]. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, code commit repository, secrets, code pipeline, code build, rds databases, and other infrastructure components. It then deploys {partner-product-short-name} into this new VPC.
-* http://qs_launch_permalink[Deploy {partner-product-short-name} into an existing VPC]. This option provisions {partner-product-short-name} into an AWS environment consisting of the code commit repository, secrets, code pipeline, code build, rds database, ands other infrastructure components into your existing AWS VPC infrastructure.
+* http://qs_launch_permalink[Deploy {partner-product-short-name} into a new VPC]. This option builds a new AWS environment consisting of the VPC, subnets, NAT gateways, security groups, AWS CodeCommit repository, secrets, AWS Code Pipeline with CodeBuild stages installed with {partner-product-name}, AWS RDS PostgreSQL databases and other infrastructure components. All infrastructure components are contains within this new VPC.
+* http://qs_launch_permalink[Deploy {partner-product-short-name} into an existing VPC]. This option provisions {partner-product-short-name} into an AWS environment consisting of the AWS CodeCommit repository, secrets, AWS Code Pipeline with CodeBuild stages installed with {partner-product-short-name}, AWS RDS PostgreSQL databases and other infrastructure components into your existing AWS VPC infrastructure.
 
-The Quick Start provides separate templates for these options. It also lets you configure rds usernames and passwords for the databases used by {partner-product-short-name}.
+The Quick Start provides separate templates for these options. It also lets you configure AWS RDS PostgreSQL engine version, instance class, allocated storage, storage type, port, usernames and passwords, and retention period for the databases used by the {partner-product-short-name} pipeline.

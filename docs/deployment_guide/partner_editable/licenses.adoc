@@ -1,6 +1,6 @@
 // Include details about any licenses and how to sign up. Provide links as appropriate.
 
 A Liquibase Pro License is required to use this Quick Start which can be 
-acquired at https://www.liquibase.com/trial
+acquired at https://www.liquibase.com/trial.
 
 There is no cost to use this Quick Start, however you will be billed for the resources deployed. For more information see the http://general-content-file[AWS Quick Start General Content Guide].
