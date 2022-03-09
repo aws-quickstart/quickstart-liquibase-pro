@@ -1,14 +1,11 @@
 :quickstart-project-name: quickstart-liquibase-pro
 :quickstart-github-org: aws-quickstart
-:partner-product-name: Full Product Name
-:partner-product-short-name: Product Name
-:partner-company-name: Example Company Name, Ltd.
-:doc-month: January
+:partner-product-name: Liquibase Pro
+:partner-product-short-name: Liquibase Pro
+:partner-company-name: Liquibase Inc.
+:doc-month: March
 :doc-year: 2022
-:partner-contributors: John Smith, {partner-company-name}
-//:other-contributors: Akua Mansa, Trek10
-// :aws-contributors: Janine Singh, AWS IoT Partner team
+:partner-contributors: Amy Smith & Mike Olivas, {partner-company-name}
 :aws-ia-contributors: Troy Lindsay & Dylan Owen, AWS Integration & Automation team
 :deployment_time: 15 minutes
 :default_deployment_region: us-east-1
-// :private_repo:
