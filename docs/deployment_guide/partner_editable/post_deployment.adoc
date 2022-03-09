@@ -14,7 +14,7 @@
 ** The Liquibase changelog is the file called dvdrentalupdatedrb.xml.
 ** This changelog file includes an includeAll tag "<includeAll path="sqlfiles"/>" which means any files added to the sqlfiles folder will be included in a deployment.
 ** Navigate to the sqlfiles folder and add a database script.
-** There is a sample testfile1.sql that you can copy and modify to create a new script, eg. testfile2.sql. Make to use a unique table name when modifying the script.  
+** There is a sample testfile1.sql that you can copy and modify to create a new script, eg. testfile2.sql. Make sure to use a unique table name when modifying the script.  
 ** More information regarding Liquibase SQL Format changesets can be found at https://docs.liquibase.com/concepts/changelogs/sql-format.html.
 * New commits to the AWS CodeCommit repository will automatically trigger builds for the pipeline.
 ** Navigate to AWS CodePipeline to check that a new build is running.
