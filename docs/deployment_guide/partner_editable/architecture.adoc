@@ -11,10 +11,10 @@ image::../docs/deployment_guide/images/architecture_diagram.png[Architecture]
 As shown in <<architecture1>>, the Quick Start sets up the following:
 
 * A code repository to house database scripts.
-* Secrets to house sensitive information such as database username and passwords and the {partner-product-short-name} license key.
+* Secrets to store sensitive information such as database username and passwords and the {partner-product-short-name} license key.
 * An AWS CodePipeline with CodeBuild stages for Test, Staging, and Production environments.
 ** Installation of {partner-product-short-name} into CodeBuild using a docker image.
-** CloudWatch events to monitor changes to the code repository to trigger new builds.
+** CloudWatch events to monitor changes to the code repository and to trigger new builds.
 ** Approval gates where changes can be approved prior to deployment to Staging and Production environments.
 * Three AWS RDS PostgreSQL databases for use as the Test, Staging, and Production environments.
 * An Amazon S3 bucket used for storing artifacts and logs for auditing purposes.

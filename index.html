@@ -930,7 +930,7 @@ acquired at <a href="https://www.liquibase.com/trial" class="bare">https://www.l
 <p>A code repository to house database scripts.</p>
 </li>
 <li>
-<p>Secrets to house sensitive information such as database username and passwords and the Liquibase Pro license key.</p>
+<p>Secrets to store sensitive information such as database username and passwords and the Liquibase Pro license key.</p>
 </li>
 <li>
 <p>An AWS CodePipeline with CodeBuild stages for Test, Staging, and Production environments.</p>
@@ -940,7 +940,7 @@ acquired at <a href="https://www.liquibase.com/trial" class="bare">https://www.l
 <p>Installation of Liquibase Pro into CodeBuild using a docker image.</p>
 </li>
 <li>
-<p>CloudWatch events to monitor changes to the code repository to trigger new builds.</p>
+<p>CloudWatch events to monitor changes to the code repository and to trigger new builds.</p>
 </li>
 <li>
 <p>Approval gates where changes can be approved prior to deployment to Staging and Production environments.</p>
@@ -1053,7 +1053,74 @@ Unless you are customizing the Quick Start templates for your own deployment pro
 <div class="ulist">
 <ul>
 <li>
-<p>Now that you have completed your Liquibase Pro setup for AWS, you can quickly and safely make changes to your database using Liquibase.</p>
+<p>Validate that the Liquibase Pro pipeline is working by navigating to the AWS CodePipelineImage displayed in the Outputs tab of the stack.</p>
+</li>
+<li>
+<p>Initial creation will build the pipeline based on the scripts in the AWS CodeCommit repository displayed in the Outputs tab of the stack.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Initial build includes a deployment to the first database in the pipeline which is the Test environment database.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>After a successful build, the AWS CodePipeline moves to the Approval-Stage automatically.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Click the Review button and add a brief message in the Comments box.</p>
+</li>
+<li>
+<p>Click Approve to trigger the deployment to the Staging environment.</p>
+</li>
+<li>
+<p>Check that the deployment is running as expected by navigating to the AWS CodeBuildImageJob displayed in the Outputs tab of the stack.</p>
+</li>
+<li>
+<p>Once the Staging deployment has completed successfully, you can navigate back to the AWS CodePipeline to Review and Approve the deployment to the Production environment.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Follow these steps below to add new scripts to be deployed into the pipeline databases.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Navigate to the AWS CodeCommitRepository.</p>
+</li>
+<li>
+<p>The Liquibase changelog is the file called dvdrentalupdatedrb.xml.</p>
+</li>
+<li>
+<p>This changelog file includes an includeAll tag "&lt;includeAll path="sqlfiles"/&gt;" which means any files added to the sqlfiles folder will be included in a deployment.</p>
+</li>
+<li>
+<p>Navigate to the sqlfiles folder and add a database script.</p>
+</li>
+<li>
+<p>There is a sample testfile1.sql that you can copy and modify to create a new script, eg. testfile2.sql. Make to use a unique table name when modifying the script.</p>
+</li>
+<li>
+<p>More information regarding Liquibase SQL Format changesets can be found at <a href="https://docs.liquibase.com/concepts/changelogs/sql-format.html" class="bare">https://docs.liquibase.com/concepts/changelogs/sql-format.html</a>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>New commits to the AWS CodeCommitRepository will automatically trigger builds for the pipeline.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Navigate to AWS CodePipeline to check that a new build is running.</p>
+</li>
+<li>
+<p>Repeat the above steps to deploy your new changes to the additional Staging and Production environments by reviewing and approving the changes.</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
