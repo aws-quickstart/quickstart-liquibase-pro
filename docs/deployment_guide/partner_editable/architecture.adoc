@@ -18,7 +18,6 @@ As shown in <<architecture1>>, the Quick Start sets up the following:
 ** Approval gates where changes can be approved prior to deployment to Staging and Production environments.
 * Three AWS RDS PostgreSQL databases for use as the Test, Staging, and Production environments.
 * An Amazon S3 bucket used for storing artifacts and logs for auditing purposes.
-* A highly available architecture that spans two Availability Zones.*
 * A VPC configured with public and private subnets, according to AWS
 best practices, to provide you with your own virtual network on AWS.*
 * In the public subnets:
