@@ -1,21 +1,21 @@
 //Include any post-deployment steps here, such as steps necessary to test that the deployment was successful. If there are no post-deployment steps leave this file empty.
 
 == Post deployment steps
-* Validate that the {partner-product-short-name} pipeline is working by navigating to the AWS CodePipelineImage displayed in the Outputs tab of the stack.
-* Initial creation will build the pipeline based on the scripts in the AWS CodeCommit repository displayed in the Outputs tab of the stack.
+* Validate that the {partner-product-short-name} pipeline is working by navigating to the AWS CodePipeline image displayed in the `+CodePipelineImage+` entry in the Outputs tab of the stack.
+* Initial creation will build the pipeline based on the scripts in the AWS CodeCommit repository displayed in the `+CodeCommitRepository+` entry in the Outputs tab of the stack.
 ** Initial build includes a deployment to the first database in the pipeline which is the Test environment database.
 * After a successful build, the AWS CodePipeline moves to the Approval-Stage automatically.
 ** Click the Review button and add a brief message in the Comments box.
 ** Click Approve to trigger the deployment to the Staging environment.
-** Check that the deployment is running as expected by navigating to the AWS CodeBuildImageJob displayed in the Outputs tab of the stack.
+** Check that the deployment is running as expected by navigating to the AWS CodeBuild image job displayed in the `+CodeBuildImageJob+` entry in the Outputs tab of the stack.
 ** Once the Staging deployment has completed successfully, you can navigate back to the AWS CodePipeline to Review and Approve the deployment to the Production environment.
 * Follow these steps below to add new scripts to be deployed into the pipeline databases.
-** Navigate to the AWS CodeCommitRepository.
+** Navigate to `+CodeCommitRepository+`.
 ** The Liquibase changelog is the file called dvdrentalupdatedrb.xml.
 ** This changelog file includes an includeAll tag "<includeAll path="sqlfiles"/>" which means any files added to the sqlfiles folder will be included in a deployment.
 ** Navigate to the sqlfiles folder and add a database script.
 ** There is a sample testfile1.sql that you can copy and modify to create a new script, eg. testfile2.sql. Make to use a unique table name when modifying the script.  
 ** More information regarding Liquibase SQL Format changesets can be found at https://docs.liquibase.com/concepts/changelogs/sql-format.html.
-* New commits to the AWS CodeCommitRepository will automatically trigger builds for the pipeline. 
+* New commits to the AWS CodeCommit repository will automatically trigger builds for the pipeline.
 ** Navigate to AWS CodePipeline to check that a new build is running.
 ** Repeat the above steps to deploy your new changes to the additional Staging and Production environments by reviewing and approving the changes.
