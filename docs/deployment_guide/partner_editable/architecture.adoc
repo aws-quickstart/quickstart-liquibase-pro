@@ -10,15 +10,15 @@ image::../docs/deployment_guide/images/architecture_diagram.png[Architecture]
 
 As shown in <<architecture1>>, the Quick Start sets up the following:
 
-* A code repository to house database scripts.
-* Secrets to store sensitive information such as database username and passwords and the {partner-product-short-name} license key.
+* An AWS CodeCommit repository to house the database scripts.
+* AWS Secrets Manager to store sensitive information such as the database username and passwords, and the {partner-product-short-name} license key.
 * An AWS CodePipeline with CodeBuild stages for Test, Staging, and Production environments.
-** Installation of {partner-product-short-name} into CodeBuild using a docker image.
-** CloudWatch events to monitor changes to the code repository and to trigger new builds.
-** Approval gates where changes can be approved prior to deployment to Staging and Production environments.
-* Three AWS RDS PostgreSQL databases for use as the Test, Staging, and Production environments.
-* An Amazon S3 bucket used for storing artifacts and logs for auditing purposes.
-* A VPC configured with public and private subnets, according to AWS
+** Installation of {partner-product-short-name} into AWS CodeBuild using a docker image.
+** Amazon CloudWatch events to monitor changes to the CodeCommit repository and to trigger new builds.
+** Approval gates where changes are reviewed & approved prior to deployment to Staging and Production environments.
+* Three Amazon Relational Database Service (RDS) PostgreSQL databases for use as the Test, Staging, and Production environments.
+* An Amazon Simple Storage Service (S3) bucket used for storing artifacts and logs for auditing purposes.
+* An Amazon Virtual Private Cloud (VPC) configured with public and private subnets, according to AWS
 best practices, to provide you with your own virtual network on AWS.*
 * In the public subnets:
 ** Managed network address translation (NAT) gateways to allow outbound
