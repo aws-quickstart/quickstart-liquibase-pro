@@ -8,21 +8,16 @@ Deploy this Quick Start for a new {partner-product-name} pipeline with deploymen
 .Quick Start architecture for {partner-product-name} on AWS
 image::../docs/deployment_guide/images/architecture_diagram.png[Architecture]
 
-As shown in <<architecture1>>, the Quick Start sets up the following:
+As shown in <<architecture1>>, this Quick Start sets up the following:
 
-* An AWS CodeCommit repository to house the database scripts.
-* AWS Secrets Manager to store sensitive information such as the database username and passwords, and the {partner-product-short-name} license key.
-* An AWS CodePipeline with CodeBuild stages for Test, Staging, and Production environments.
-** Installation of {partner-product-short-name} into AWS CodeBuild using a docker image.
-** Amazon CloudWatch events to monitor changes to the CodeCommit repository and to trigger new builds.
-** Approval gates where changes are reviewed & approved prior to deployment to Staging and Production environments.
-* Three Amazon Relational Database Service (RDS) PostgreSQL databases for use as the Test, Staging, and Production environments.
-* An Amazon Simple Storage Service (S3) bucket used for storing artifacts and logs for auditing purposes.
-* An Amazon Virtual Private Cloud (VPC) configured with public and private subnets, according to AWS
+* AWS Secrets Manager to store sensitive information, such as database user names, passwords, and the {partner-product-short-name} license key.
+* AWS CodeCommit to store and manage database scripts.
+* Amazon CloudWatch events to monitor changes to the AWS CodeCommit repository and invoke new builds.
+* AWS CodePipeline to model, visualize, and automate the steps required to release your software.
+* AWS CodeBuild to compile source code, runs unit tests, and produces artifacts that are ready to deploy.
+* Amazon Simple Storage Service (Amazon S3) for storing artifacts and logs for auditing purposes.
+* A virtual private cloud (VPC) configured with public and private subnets, according to AWS
 best practices, to provide you with your own virtual network on AWS.*
-* In the public subnets:
-** Managed network address translation (NAT) gateways to allow outbound
-internet access for resources in the private subnets.*
-// Add bullet points for any additional components that are included in the deployment. Ensure that the additional components are also represented in the architecture diagram. End each bullet with a period.
+* Inside the VPC, three Amazon Relational Database Service (Amazon RDS) PostgreSQL databases for testing, staging, and production environments.
 
 [.small]#* The template that deploys the Quick Start into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
