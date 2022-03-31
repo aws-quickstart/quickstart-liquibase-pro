@@ -171,7 +171,7 @@ Parameters:
   DatabaseEngineVersion:
     Description: Database engine version.
     Type: String
-    Default: 12.5
+    Default: 12.9
   DatabasePort:
     Description: Database TCP listening port.
     Type: Number
