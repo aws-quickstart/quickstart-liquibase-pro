@@ -6,6 +6,9 @@ taskcat_outputs/
 # TaskCat Lambda zip path
 packages/
 
+# Docs
+docs/
+
 # macOS
 .DS_Store
 

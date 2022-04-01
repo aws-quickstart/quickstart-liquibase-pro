@@ -210,11 +210,11 @@ Parameters:
     Description: Enable for automated CI/CD testing to skip deployment of the
       AWS CodePipeline pipeline and dependent Amazon CloudWatch event rule.
       This was implemented because 1/ the pipeline includes stages that require
-      manual approval, and 2/ the AWS CodeBuild stages build AWS Lambda
-      functions with elastic network interfaces (ENIs) attached to the
-      LambdaSecurityGroup resource. As of 2022-02-27, when this type of
-      CodeBuild job is interrupted, the ENI is orphaned while still attached to
-      the security group, which will cause stack deletion to fail.
+      manual approval, and 2/ the AWS CodeBuild stages build containers with
+      elastic network interfaces (ENIs) attached to the CodeBuildSecurityGroup
+      resource. As of 2022-03-31, when this type of CodeBuild job is
+      interrupted, the ENI is orphaned while still attached to the security
+      group, which will cause stack deletion to fail.
     Type: String
     AllowedValues:
       - "true"
@@ -318,7 +318,7 @@ Resources:
           Value: !Ref ProjectName
       VpcConfig:
         SecurityGroupIds:
-          - !Ref LambdaSecurityGroup
+          - !Ref CodeBuildSecurityGroup
         Subnets:
           - !Ref PrivateSubnet01
           - !Ref PrivateSubnet02
@@ -517,7 +517,7 @@ Resources:
       IpProtocol: tcp
       FromPort: !Ref DatabasePort
       ToPort: !Ref DatabasePort
-      SourceSecurityGroupId: !Ref LambdaSecurityGroup
+      SourceSecurityGroupId: !Ref CodeBuildSecurityGroup
   RDSSecurityGroupEgress:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
@@ -527,16 +527,16 @@ Resources:
       FromPort: 8
       ToPort: 8
       CidrIp: 127.0.0.1/32
-  LambdaSecurityGroup:
+  CodeBuildSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: !Sub ${ProjectName}-SecurityGroup for Lambda
-      GroupName: !Sub ${ProjectName}-LambdaSecurityGroup
+      GroupDescription: !Sub ${ProjectName}-SecurityGroup for CodeBuild
+      GroupName: !Sub ${ProjectName}-CodeBuildSecurityGroup
       VpcId: !Ref VPCID
-  LambdaSecurityGroupEgress:
+  CodeBuildSecurityGroupEgress:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
-      GroupId: !Ref LambdaSecurityGroup
+      GroupId: !Ref CodeBuildSecurityGroup
       IpProtocol: -1
       CidrIp: 0.0.0.0/0
   RDSDBSubnetGroup:
@@ -636,11 +636,11 @@ Outputs:
     Value: !Ref CodePipelineImage
     Export:
       Name: !Sub ${ProjectName}-CodePipeline
-  LambdaSecurityGroup:
-    Description: Lambda Security Group name.
-    Value: !Ref LambdaSecurityGroup
+  CodeBuildSecurityGroup:
+    Description: CodeBuild Security Group name.
+    Value: !Ref CodeBuildSecurityGroup
     Export:
-      Name: !Sub ${ProjectName}-LambdaSecurityGroup
+      Name: !Sub ${ProjectName}-CodeBuildSecurityGroup
   RDSSecurityGroup:
     Description: RDS Security Group name.
     Value: !Ref RDSSecurityGroup

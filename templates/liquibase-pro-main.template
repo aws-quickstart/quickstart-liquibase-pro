@@ -171,7 +171,7 @@ Parameters:
   DatabaseEngineVersion:
     Description: Database engine version.
     Type: String
-    Default: 12.5
+    Default: 12.9
   DatabasePort:
     Description: Database TCP listening port.
     Type: Number
@@ -280,11 +280,11 @@ Parameters:
     Description: Enable for automated CI/CD testing to skip deployment of the
       AWS CodePipeline pipeline and dependent Amazon CloudWatch event rule.
       This was implemented because 1/ the pipeline includes stages that require
-      manual approval, and 2/ the AWS CodeBuild stages build AWS Lambda
-      functions with elastic network interfaces (ENIs) attached to the
-      LambdaSecurityGroup resource. As of 2022-02-27, when this type of
-      CodeBuild job is interrupted, the ENI is orphaned while still attached to
-      the security group, which will cause stack deletion to fail.
+      manual approval, and 2/ the AWS CodeBuild stages build containers with
+      elastic network interfaces (ENIs) attached to the CodeBuildSecurityGroup
+      resource. As of 2022-03-31, when this type of CodeBuild job is
+      interrupted, the ENI is orphaned while still attached to the security
+      group, which will cause stack deletion to fail.
     Type: String
     AllowedValues:
       - "true"
