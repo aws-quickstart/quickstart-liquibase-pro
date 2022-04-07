@@ -5,14 +5,14 @@
 * Initial deployment builds the pipeline based on scripts in the AWS CodeCommit repository displayed in the `CodeCommitRepository` entry in the stack's *Outputs* tab.
 ** Initial deployment includes the first database in the pipeline, which is the test environment database.
 
-==== After you successfully deploy this Quick Start, AWS CodePipeline automatically moves to the approval stage:
+=== After you successfully deploy this Quick Start, AWS CodePipeline automatically moves to the approval stage:
 
 . Choose the *Review* button, and add a brief message in the *Comments* box.
 . Choose *Approve* to invoke the deployment to the staging environment.
 . Navigate to the AWS CodeBuild image job displayed in the `CodeBuildImageJob` entry in the stack's *Outputs* tab, and ensure that the deployment runs as expected.
 . When the staging deployment completes successfully, navigate to AWS CodePipeline to review and approve the deployment to the production environment.
 
-==== To add new scripts for deployment into the pipeline databases, follow these steps:
+=== To add new scripts for deployment into the pipeline databases, follow these steps:
 
 . Navigate to `CodeCommitRepository`.
 . Locate the Liquibase changelog named `dvdrentalupdatedrb.xml`. This changelog file includes an `includeAll` tag (`"<includeAll path="sqlfiles"/>"`), which means any files added to the `sqlfiles` folder are included.
