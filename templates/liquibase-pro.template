@@ -237,10 +237,7 @@ Parameters:
       - 'no'
     Default: 'no'
 Conditions:
-  Deploy: !Not
-    - !Equals
-      - !Ref IsAutomatedTest
-      - "true"
+  Deploy: !Not [!Equals [!Ref IsAutomatedTest, 'no']]
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret

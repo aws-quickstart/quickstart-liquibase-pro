@@ -317,27 +317,17 @@ Parameters:
       - 'no'
     Default: 'no'
 Conditions:
-  UsingDefaultBucket: !Equals
-    - !Ref QSS3BucketName
-    - aws-quickstart
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, aws-quickstart]
 Resources:
   VPCStack:
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL: !Sub
         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/quickstart-aws-vpc/templates/aws-vpc.template.yaml
-        - S3Bucket: !If
-            - UsingDefaultBucket
-            - !Sub ${QSS3BucketName}-${AWS::Region}
-            - !Ref QSS3BucketName
-          S3Region: !If
-            - UsingDefaultBucket
-            - !Ref AWS::Region
-            - !Ref QSS3BucketRegion
+        - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          S3Region: !If [UsingDefaultBucket, !Ref AWS::Region, !Ref QSS3BucketRegion]
       Parameters:
-        AvailabilityZones: !Join
-          - ","
-          - !Ref AvailabilityZones
+        AvailabilityZones: !Join [',', !Ref AvailabilityZones]
         NumberOfAZs: 2
         PrivateSubnet1ACIDR: !Ref PrivateSubnet1CIDR
         PrivateSubnet2ACIDR: !Ref PrivateSubnet2CIDR
@@ -350,14 +340,8 @@ Resources:
     Properties:
       TemplateURL: !Sub
         - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/liquibase-pro.template
-        - S3Bucket: !If
-            - UsingDefaultBucket
-            - !Sub ${QSS3BucketName}-${AWS::Region}
-            - !Ref QSS3BucketName
-          S3Region: !If
-            - UsingDefaultBucket
-            - !Ref AWS::Region
-            - !Ref QSS3BucketRegion
+        - S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+          S3Region: !If [UsingDefaultBucket, !Ref AWS::Region, !Ref QSS3BucketRegion]
       Parameters:
         LiquibaseProKey: !Ref LiquibaseProKey
         DatabaseUsernameProd: !Ref DatabaseUsernameProd
