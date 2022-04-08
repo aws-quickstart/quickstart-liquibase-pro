@@ -19,7 +19,7 @@ project:
     DatabaseUsernameProd: $[taskcat_genpass_16A]
     DatabasePasswordProd: $[taskcat_genpass_128A]
     # DatabasePort: 54321
-    IsAutomatedTest: "true"
+    IsAutomatedTest: 'yes'
 tests:
   default:
     regions:

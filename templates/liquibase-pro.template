@@ -222,7 +222,8 @@ Parameters:
       hyphen (-).
     Default: aws-quickstart
   IsAutomatedTest:
-    Description: Enable for automated CI/CD testing to skip deployment of the
+    Description: >-
+      Choose yes for automated CI/CD testing to skip deployment of the
       AWS CodePipeline pipeline and dependent Amazon CloudWatch event rule.
       This was implemented because 1/ the pipeline includes stages that require
       manual approval, and 2/ the AWS CodeBuild stages build containers with
@@ -232,9 +233,9 @@ Parameters:
       group, which will cause stack deletion to fail.
     Type: String
     AllowedValues:
-      - "true"
-      - "false"
-    Default: "false"
+      - 'yes'
+      - 'no'
+    Default: 'no'
 Conditions:
   Deploy: !Not
     - !Equals
