@@ -92,7 +92,10 @@ Metadata:
         default: Is this an automated test?
 Parameters:
   LiquibaseProKey:
-    Description: Enter your Liquibase Pro key here. If you don't have one, visit https://download.liquibase.org/liquibase-pro-trial-request-form/ to start a free trial.
+    Description: >-
+      Enter your Liquibase Pro key here. If you don't have one, visit
+      https://download.liquibase.org/liquibase-pro-trial-request-form/ to start
+      a free trial.
     Type: String
     NoEcho: true
   DatabaseUsernameProd:
@@ -101,7 +104,8 @@ Parameters:
     MinLength: 1
     MaxLength: 16
     AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
-    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
+    ConstraintDescription: >-
+      1 to 16 alphanumeric characters. First character must be a letter.
     Default: postgres
   DatabasePasswordProd:
     Description: Database password for Production.
@@ -109,7 +113,9 @@ Parameters:
     MinLength: 8
     MaxLength: 128
     AllowedPattern: ^[^/'\"@]+$
-    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
+    ConstraintDescription: >-
+      8 to 128 printable ASCII characters. Can''t contain any of the following:
+      slash (/), single quote (''), double quote ("), or at sign (@).
     NoEcho: true
   DatabaseUsernameStage:
     Description: Database username for Staging.
@@ -117,7 +123,8 @@ Parameters:
     MinLength: 1
     MaxLength: 16
     AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
-    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
+    ConstraintDescription: >-
+      1 to 16 alphanumeric characters. First character must be a letter.
     Default: postgres
   DatabasePasswordStage:
     Description: Database password for Staging.
@@ -125,7 +132,9 @@ Parameters:
     MinLength: 8
     MaxLength: 128
     AllowedPattern: ^[^/'\"@]+$
-    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
+    ConstraintDescription: >-
+      8 to 128 printable ASCII characters. Can''t contain any of the following:
+      slash (/), single quote (''), double quote ("), or at sign (@).
     NoEcho: true
   DatabaseUsernameTest:
     Description: Database username for Test.
@@ -133,7 +142,8 @@ Parameters:
     MinLength: 1
     MaxLength: 16
     AllowedPattern: ^[a-zA-Z][a-zA-Z0-9]*$
-    ConstraintDescription: 1 to 16 alphanumeric characters. First character must be a letter.
+    ConstraintDescription: >-
+      1 to 16 alphanumeric characters. First character must be a letter.
     Default: postgres
   DatabasePasswordTest:
     Description: Database password for Test.
@@ -141,7 +151,9 @@ Parameters:
     MinLength: 8
     MaxLength: 128
     AllowedPattern: ^[^/'\"@]+$
-    ConstraintDescription: "8 to 128 printable ASCII characters. Can't contain any of the following: slash (/), single quote ('), double quote (\"), or at sign (@)."
+    ConstraintDescription: >-
+      8 to 128 printable ASCII characters. Can't contain any of the following:
+      slash (/), single quote (''), double quote ("), or at sign (@).
     NoEcho: true
   DatabaseInstanceClass:
     Description: Database instance class.
@@ -172,12 +184,14 @@ Parameters:
     Type: Number
     Default: 7
   ProjectName:
-    Description: Project name. Used in resource names and descriptions.
+    Description: Project name used in resource names and descriptions.
     Type: String
     MinLength: 1
     MaxLength: 48
     AllowedPattern: ^[a-z][a-z0-9-]*$
-    ConstraintDescription: 1 to 48 lowercase alphanumeric characters and hyphens (-). First character must be a letter.
+    ConstraintDescription: >-
+      1 to 48 lowercase alphanumeric characters and hyphens (-). First
+      character must be a letter.
     Default: liquibase-pro-sample
   VPCID:
     Description: ID of the VPC (e.g., vpc-0343606e).
@@ -191,7 +205,8 @@ Parameters:
     Type: AWS::EC2::Subnet::Id
     Default: subnet-ID
   QSS3BucketName:
-    Description: Name of the S3 bucket for your copy of the Quick Start assets.
+    Description: >-
+      Name of the S3 bucket for your copy of the Quick Start assets.
       Keep the default name unless you are customizing the template.
       Changing the name updates code references to point to a new Quick
       Start location. This name can include numbers, lowercase letters,
@@ -201,7 +216,7 @@ Parameters:
     MinLength: 3
     MaxLength: 63
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription:
+    ConstraintDescription: >-
       The Quick Start bucket name can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a
       hyphen (-).
@@ -287,10 +302,11 @@ Resources:
         NamespaceType: NONE
         OverrideArtifactName: true
         Packaging: ZIP
-        Path: ""
+        Path: ''
         Type: S3
-      Description: CodeBuild Project to pull from a GIT repository containing
-        Liquibase project and a "buildspec.yml" file.
+      Description: >-
+        CodeBuild Project to pull from a GIT repository containing Liquibase
+        project and a 'buildspec.yml' file.
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
         Image: registry.hub.docker.com/liquibase/liquibase:latest
@@ -522,7 +538,8 @@ Resources:
     Type: AWS::EC2::SecurityGroupEgress
     Properties:
       GroupId: !Ref RDSSecurityGroup
-      Description: Placeholder rule to disable CloudFormation default open outbound/egress
+      Description: >-
+        Placeholder rule to disable CloudFormation default open outbound/egress
       IpProtocol: icmp
       FromPort: 8
       ToPort: 8
