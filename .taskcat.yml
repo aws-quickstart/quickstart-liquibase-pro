@@ -5,7 +5,7 @@ project:
   lambda_source_path: lambda_functions/source
   lambda_zip_path: packages
   s3_regional_buckets: true
-  template: templates/liquibase-pro-main.template
+  template: templates/liquibase-pro-main.template.yaml
   parameters:
     QSS3BucketName: $[taskcat_autobucket]
     QSS3BucketRegion: $[taskcat_current_region]
