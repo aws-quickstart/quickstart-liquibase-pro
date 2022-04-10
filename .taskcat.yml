@@ -46,11 +46,11 @@ tests:
       - ap-east-1
       - eu-north-1
       - eu-south-1
-  us-govcloud:
-    auth:
-      us-gov-west-1: gov
-    regions:
-      - us-gov-west-1
+  # us-govcloud:
+  #   auth:
+  #     us-gov-west-1: gov
+  #   regions:
+  #     - us-gov-west-1
   # not-yet-supported:
   # # One or more required services aren't available yet in these regions
   #   regions:
