@@ -2,20 +2,20 @@
 
 For troubleshooting common Quick Start issues, see the https://fwd.aws/rA69w?[AWS Quick Start General Information Guide^] and the https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html[Troubleshooting CloudFormation^]. For more information about {partner-product-short-name} concepts, commands, and workflows, refer to https://docs.liquibase.com/[{partner-product-short-name} Documentation^].
 
-If the AWS CloudFormation stack fails to delete the `LambdaSecurityGroup` resource when you no longer need the deployed resources, this is because the AWS Lambda elastic network interface (ENI) is still attached to the security group. The Lambda function uses this ENI to communicate with the Amazon RDS databases. This issue usually occurs if the AWS CloudFormation stack is deleted while an AWS CodePipeline job is incomplete (for example, you have an incomplete manual-approval step). If this occurs, follow these steps:
+If the AWS CloudFormation stack fails to delete the `CodeBuildSecurityGroup` resource when you no longer need the deployed resources, this is because the AWS CodeBuild elastic network interface (ENI) is still attached to the security group. The CodeBuild function uses this ENI to communicate with the Amazon RDS databases. This issue usually occurs if the AWS CloudFormation stack is deleted while an AWS CodePipeline job is incomplete (for example, you have an incomplete manual-approval step). If this occurs, follow these steps:
 
 . Navigate to the *Network* interfaces section of the Amazon Elastic Cloud Compute (Amazon EC2) console.
-. Enter the security group ID (for example, `sg-01234567`) for the `LambdaSecurityGroup` resource in the *Filter network interfaces* field at the top of the page.
+. Enter the security group ID (for example, `sg-01234567`) for the `CodeBuildSecurityGroup` resource in the *Filter network interfaces* field at the top of the page.
 . Select the checkbox next to the ENI.
 +
 NOTE: The filtered results should list only one ENI with this security group attached.
 +
 . Choose the *Actions* drop-down button at the top-right.
 . Choose *Change security groups*.
-. Choose *Remove* next to the security group that matches the `LambdaSecurityGroup` resource ID.
+. Choose *Remove* next to the security group that matches the `CodeBuildSecurityGroup` resource ID.
 . Choose *Save* at the bottom.
 +
 NOTE: There should be only one attached security group for this ENI.
 +
-. Return to the AWS CloudFormation console and delete the CloudFormation stack again, which should successfully delete the `LambdaSecurityGroup` resource.
+. Return to the AWS CloudFormation console and delete the CloudFormation stack again, which should successfully delete the `CodeBuildSecurityGroup` resource.
 . Return to the Amazon EC2 console and delete the ENI.
