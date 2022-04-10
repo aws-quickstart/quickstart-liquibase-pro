@@ -224,10 +224,10 @@ Parameters:
   IsAutomatedTest:
     Description: >-
       Choose yes for automated CI/CD testing to skip deployment of the
-      AWS CodePipeline pipeline and dependent Amazon CloudWatch event rule.
-      This was implemented because 1/ the pipeline includes stages that require
-      manual approval, and 2/ the AWS CodeBuild stages build containers with
-      elastic network interfaces (ENIs) attached to the CodeBuildSecurityGroup
+      AWS CodePipeline pipeline and Amazon EventBridge rule. This was
+      implemented because 1/ the pipeline includes stages that require manual
+      approval, and 2/ the AWS CodeBuild stages build containers with elastic
+      network interfaces (ENIs) attached to the CodeBuildSecurityGroup
       resource. As of 2022-03-31, when this type of CodeBuild job is
       interrupted, the ENI is orphaned while still attached to the security
       group, which will cause stack deletion to fail.
@@ -346,7 +346,7 @@ Resources:
           - !Ref PrivateSubnet01
           - !Ref PrivateSubnet02
         VpcId: !Ref VPCID
-  CloudWatchEventRole:
+  EventBridgeRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
@@ -358,7 +358,7 @@ Resources:
                 - events.amazonaws.com
             Action: sts:AssumeRole
       Path: /
-  CloudWatchEventRule:
+  EventBridgeRule:
     Type: AWS::Events::Rule
     Condition: Deploy
     Properties:
@@ -379,7 +379,7 @@ Resources:
             - main
       Targets:
         - Arn: !Sub arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${CodePipelineImage}
-          RoleArn: !GetAtt CloudWatchEventRole.Arn
+          RoleArn: !GetAtt EventBridgeRole.Arn
           Id: codepipeline-CodePipelineImage
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
