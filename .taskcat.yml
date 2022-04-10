@@ -10,7 +10,7 @@ project:
     QSS3BucketName: $[taskcat_autobucket]
     QSS3BucketRegion: $[taskcat_current_region]
     ProjectName: $[taskcat_random-string]-$[taskcat_current_region]
-    LiquibaseProKey:
+    LiquibaseProKey: override
     AvailabilityZones: $[taskcat_genaz_2]
     DatabaseUsernameTest: b
     DatabasePasswordTest: $[taskcat_genpass_8A]
