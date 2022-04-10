@@ -1126,7 +1126,7 @@ There is a <code>testfile1.sql</code> that you can copy and modify to create a n
 <p>For troubleshooting common Quick Start issues, see the <a href="https://fwd.aws/rA69w?" target="_blank" rel="noopener">AWS Quick Start General Information Guide</a> and the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html" target="_blank" rel="noopener">Troubleshooting CloudFormation</a>. For more information about Liquibase Pro concepts, commands, and workflows, refer to <a href="https://docs.liquibase.com/" target="_blank" rel="noopener">Liquibase Pro Documentation</a>.</p>
 </div>
 <div class="paragraph">
-<p>If the AWS CloudFormation stack fails to delete the <code>LambdaSecurityGroup</code> resource when you no longer need the deployed resources, this is because the AWS Lambda elastic network interface (ENI) is still attached to the security group. The Lambda function uses this ENI to communicate with the Amazon RDS databases. This issue usually occurs if the AWS CloudFormation stack is deleted while an AWS CodePipeline job is incomplete (for example, you have an incomplete manual-approval step). If this occurs, follow these steps:</p>
+<p>If the AWS CloudFormation stack fails to delete the <code>CodeBuildSecurityGroup</code> resource when you no longer need the deployed resources, this is because the AWS CodeBuild elastic network interface (ENI) is still attached to the security group. The CodeBuild function uses this ENI to communicate with the Amazon RDS databases. This issue usually occurs if the AWS CloudFormation stack is deleted while an AWS CodePipeline job is incomplete (for example, you have an incomplete manual-approval step). If this occurs, follow these steps:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1134,7 +1134,7 @@ There is a <code>testfile1.sql</code> that you can copy and modify to create a n
 <p>Navigate to the <strong>Network</strong> interfaces section of the Amazon Elastic Cloud Compute (Amazon EC2) console.</p>
 </li>
 <li>
-<p>Enter the security group ID (for example, <code>sg-01234567</code>) for the <code>LambdaSecurityGroup</code> resource in the <strong>Filter network interfaces</strong> field at the top of the page.</p>
+<p>Enter the security group ID (for example, <code>sg-01234567</code>) for the <code>CodeBuildSecurityGroup</code> resource in the <strong>Filter network interfaces</strong> field at the top of the page.</p>
 </li>
 <li>
 <p>Select the checkbox next to the ENI.</p>
@@ -1158,7 +1158,7 @@ The filtered results should list only one ENI with this security group attached.
 <p>Choose <strong>Change security groups</strong>.</p>
 </li>
 <li>
-<p>Choose <strong>Remove</strong> next to the security group that matches the <code>LambdaSecurityGroup</code> resource ID.</p>
+<p>Choose <strong>Remove</strong> next to the security group that matches the <code>CodeBuildSecurityGroup</code> resource ID.</p>
 </li>
 <li>
 <p>Choose <strong>Save</strong> at the bottom.</p>
@@ -1176,7 +1176,7 @@ There should be only one attached security group for this ENI.
 </div>
 </li>
 <li>
-<p>Return to the AWS CloudFormation console and delete the CloudFormation stack again, which should successfully delete the <code>LambdaSecurityGroup</code> resource.</p>
+<p>Return to the AWS CloudFormation console and delete the CloudFormation stack again, which should successfully delete the <code>CodeBuildSecurityGroup</code> resource.</p>
 </li>
 <li>
 <p>Return to the Amazon EC2 console and delete the ENI.</p>
