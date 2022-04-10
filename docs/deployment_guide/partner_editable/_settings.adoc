@@ -3,7 +3,7 @@
 :partner-product-name: Liquibase Pro
 :partner-product-short-name: Liquibase Pro
 :partner-company-name: Liquibase Inc.
-:doc-month: March
+:doc-month: April
 :doc-year: 2022
 :partner-contributors: Amy Smith and Mike Olivas, {partner-company-name}
 :aws-ia-contributors: Troy Lindsay and Dylan Owen, AWS Integration & Automation team
