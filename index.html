@@ -842,8 +842,8 @@ p.footer-text a{color:#d7d8d8}
 <li><a href="#_deployment_steps">Deployment steps</a></li>
 <li><a href="#_postdeployment_steps">Postdeployment steps</a>
 <ul class="sectlevel2">
-<li><a href="#_after_you_successfully_deploy_this_quick_start_aws_codepipeline_automatically_moves_to_the_approval_stage">After you successfully deploy this Quick Start, AWS CodePipeline automatically moves to the approval stage:</a></li>
-<li><a href="#_to_add_new_scripts_for_deployment_into_the_pipeline_databases_follow_these_steps">To add new scripts for deployment into the pipeline databases, follow these steps:</a></li>
+<li><a href="#_change_approvals">Change approvals</a></li>
+<li><a href="#_test_your_own_changes">Test your own changes</a></li>
 </ul>
 </li>
 <li><a href="#_troubleshooting">Troubleshooting</a></li>
@@ -1058,11 +1058,14 @@ Unless you are customizing the Quick Start templates for your own projects, don&
 </ul>
 </div>
 <div class="sect2">
-<h3 id="_after_you_successfully_deploy_this_quick_start_aws_codepipeline_automatically_moves_to_the_approval_stage">After you successfully deploy this Quick Start, AWS CodePipeline automatically moves to the approval stage:</h3>
+<h3 id="_change_approvals">Change approvals</h3>
+<div class="paragraph">
+<p>After you successfully deploy this Quick Start, AWS CodePipeline automatically moves to the first approval stage:</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Choose the <strong>Review</strong> button, and add a brief message in the <strong>Comments</strong> box.</p>
+<p>Choose the <strong>Review</strong> button, and optionally add a brief message in the <strong>Comments</strong> box.</p>
 </li>
 <li>
 <p>Choose <strong>Approve</strong> to invoke the deployment to the staging environment.</p>
@@ -1077,7 +1080,10 @@ Unless you are customizing the Quick Start templates for your own projects, don&
 </div>
 </div>
 <div class="sect2">
-<h3 id="_to_add_new_scripts_for_deployment_into_the_pipeline_databases_follow_these_steps">To add new scripts for deployment into the pipeline databases, follow these steps:</h3>
+<h3 id="_test_your_own_changes">Test your own changes</h3>
+<div class="paragraph">
+<p>To add new scripts for deployment into the pipeline databases, follow these steps:</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1233,7 +1239,7 @@ There should be only one attached security group for this ENI.
 </html>
 <!--
 repo commit:
-5074fb0cdd4466878acdfc2f67be1e8fe0e5cacc
+a3e025249839b92b4a61cc4f4579befbe8c95989
 
 submodule config:
  9ba026e9ac63878391cf7d08f9e5ed501d53288b docs/boilerplate (heads/main)
