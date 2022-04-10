@@ -12,7 +12,7 @@ As shown in <<architecture1>>, this Quick Start sets up the following:
 
 * AWS Secrets Manager to store sensitive information, such as database user names, passwords, and the {partner-product-short-name} license key.
 * AWS CodeCommit to store and manage database scripts.
-* Amazon CloudWatch events to monitor changes to the AWS CodeCommit repository and invoke new builds.
+* Amazon EventBridge to invoke new builds when the main branch is updated in the AWS CodeCommit repository.
 * AWS CodePipeline to model, visualize, and automate the steps required to release your software.
 * AWS CodeBuild to compile source code, runs unit tests, and produces artifacts that are ready to deploy.
 * Amazon Simple Storage Service (Amazon S3) for storing artifacts and logs for auditing purposes.
