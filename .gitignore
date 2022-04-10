@@ -1,7 +1,0 @@
-# TaskCat
-.taskcat/
-packages/
-taskcat_outputs/
-
-# IDE workspace settings
-.vscode/
