@@ -181,7 +181,7 @@ Parameters:
   DatabaseInstanceClass:
     Description: Database instance class.
     Type: String
-    Default: db.t2.micro
+    Default: db.t3.micro
   DatabaseEngineVersion:
     Description: Database engine version.
     Type: String
