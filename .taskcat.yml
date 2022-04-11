@@ -5,12 +5,12 @@ project:
   lambda_source_path: lambda_functions/source
   lambda_zip_path: packages
   s3_regional_buckets: true
-  template: templates/liquibase-pro-main.template
+  template: templates/liquibase-pro-main.template.yaml
   parameters:
     QSS3BucketName: $[taskcat_autobucket]
     QSS3BucketRegion: $[taskcat_current_region]
     ProjectName: $[taskcat_random-string]-$[taskcat_current_region]
-    LiquibaseProKey:
+    LiquibaseProKey: override
     AvailabilityZones: $[taskcat_genaz_2]
     DatabaseUsernameTest: b
     DatabasePasswordTest: $[taskcat_genpass_8A]
@@ -19,38 +19,40 @@ project:
     DatabaseUsernameProd: $[taskcat_genpass_16A]
     DatabasePasswordProd: $[taskcat_genpass_128A]
     # DatabasePort: 54321
-    IsAutomatedTest: "true"
+    IsAutomatedTest: 'yes'
+  regions:
+    - ap-east-1
+    - ap-northeast-1
+    - ap-northeast-2
+    - ap-south-1
+    - ap-southeast-1
+    - ap-southeast-2
+    - ca-central-1
+    - eu-central-1
+    - eu-north-1
+    - eu-south-1
+    - eu-west-1
+    - eu-west-2
+    - eu-west-3
+    - sa-east-1
+    - us-east-1
+    - us-east-2
+    - us-west-1
+    - us-west-2
+    - us-gov-west-1
+  # regions-not-yet-supported:
+  # # One or more required services aren't available yet in these regions
+  #   - af-south-1
+  #   - ap-northeast-3
+  #   - ap-southeast-3
+  #   - cn-north-1
+  #   - cn-northwest-1
+  #   - me-south-1
+  #   - us-gov-east-1
 tests:
   default:
     regions:
-      - ap-northeast-1
-      - ap-northeast-2
-      - ap-south-1
-      - ap-southeast-1
-      - ap-southeast-2
-      - ca-central-1
-      - eu-central-1
-      - eu-west-1
-      - eu-west-2
-      - eu-west-3
-      - sa-east-1
       - us-east-1
-      - us-east-2
-      - us-west-1
-      - us-west-2
-  db-t3-micro:
-    # db.t2.micro isn't available in these regions
-    parameters:
-      DatabaseInstanceClass: db.t3.micro
-    regions:
-      - ap-east-1
-      - eu-north-1
-      - eu-south-1
-  us-govcloud:
-    auth:
-      us-gov-west-1: gov
-    regions:
-      - us-gov-west-1
   # not-yet-supported:
   # # One or more required services aren't available yet in these regions
   #   regions:
