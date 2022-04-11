@@ -53,13 +53,3 @@ tests:
   default:
     regions:
       - us-east-1
-  # not-yet-supported:
-  # # One or more required services aren't available yet in these regions
-  #   regions:
-  #     - af-south-1
-  #     - ap-northeast-3
-  #     - ap-southeast-3
-  #     - cn-north-1
-  #     - cn-northwest-1
-  #     - me-south-1
-  #     - us-gov-east-1
