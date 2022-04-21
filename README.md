@@ -1,5 +1,4 @@
-
-## quickstart-liquibase-pro—Quick Start
+# Liquibase Pro Quick Start
 
 For architectural details, step-by-step instructions, and customization options, see the [deployment guide](https://aws-quickstart.github.io/quickstart-liquibase-pro/).
 
