@@ -741,3 +741,6 @@ Outputs:
     Value: !Ref RDSInstanceTest
     Export:
       Name: !Sub ${ProjectName}-test
+  Postdeployment:
+    Description: See the deployment guide for post-deployment steps.
+    Value: https://aws-quickstart.github.io/quickstart-liquibase-pro/#_postdeployment_steps
