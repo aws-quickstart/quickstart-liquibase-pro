@@ -28,6 +28,7 @@ Metadata:
           default: Project configuration
         Parameters:
           - ProjectName
+          - CodePipelineS3BucketName
       - Label:
           default: Liquibase configuration
         Parameters:
@@ -60,6 +61,8 @@ Metadata:
     ParameterLabels:
       AvailabilityZones:
         default: Availability Zones
+      CodePipelineS3BucketName:
+        default: S3 bucket for storing artifacts
       DatabaseUsernameStage:
         default: Database username for Staging
       DatabasePasswordStage:
@@ -185,7 +188,7 @@ Parameters:
   DatabaseEngineVersion:
     Description: Database engine version.
     Type: String
-    Default: 12.9
+    Default: 12.11
   DatabasePort:
     Description: Database TCP listening port.
     Type: Number
@@ -316,8 +319,19 @@ Parameters:
       - 'yes'
       - 'no'
     Default: 'no'
+  CodePipelineS3BucketName:
+    Description: >-
+      Name of the S3 bucket to store artifacts from CodePipeline.
+      If you leave this parameter empty, a new bucket will be created for you via CloudFormation.
+      If using a CloudFormation-generated bucket, the contents of the bucket must be deleted prior to deleting the stack.
+      This name can include numbers, lowercase letters,
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-).
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
+    Default: ""
 Conditions:
   UsingDefaultBucket: !Equals [!Ref QSS3BucketName, aws-quickstart]
+  IsCodePipelineS3BuckeEmpty:  !Equals [!Ref "CodePipelineS3BucketName", ""]
 Resources:
   VPCStack:
     Type: AWS::CloudFormation::Stack
@@ -357,6 +371,7 @@ Resources:
         DatabaseAllocatedStorage: !Ref DatabaseAllocatedStorage
         DatabaseBackupRetentionPeriod: !Ref DatabaseBackupRetentionPeriod
         ProjectName: !Ref ProjectName
+        CodePipelineS3BucketName: !Ref CodePipelineS3BucketName       
         QSS3BucketName: !Ref QSS3BucketName
         VPCID: !GetAtt VPCStack.Outputs.VPCID
         PrivateSubnet01: !GetAtt VPCStack.Outputs.PrivateSubnet1AID
