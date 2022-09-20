@@ -18,6 +18,7 @@ Metadata:
           default: Project configuration
         Parameters:
           - ProjectName
+          - CodePipelineS3BucketName
       - Label:
           default: Liquibase configuration
         Parameters:
@@ -52,6 +53,8 @@ Metadata:
         Parameters:
           - IsAutomatedTest
     ParameterLabels:
+      CodePipelineS3BucketName:
+        default: Code Pipeline S3 bucket name for storing artifacts
       DatabaseUsernameStage:
         default: Database username for Staging
       DatabasePasswordStage:
@@ -162,7 +165,7 @@ Parameters:
   DatabaseEngineVersion:
     Description: Database engine version.
     Type: String
-    Default: 12.9
+    Default: 12.11
   DatabasePort:
     Description: Database TCP listening port.
     Type: Number
@@ -236,8 +239,19 @@ Parameters:
       - 'yes'
       - 'no'
     Default: 'no'
+  CodePipelineS3BucketName:
+    Description: >-
+      Name of the S3 bucket to store artifacts from CodePipeline.
+      If you leave this parameter empty, a new bucket will be created for you via CloudFormation.
+      If using a CloudFormation-generated bucket, the contents of the bucket must be deleted prior to deleting the stack.
+      This name can include numbers, lowercase letters,
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-).
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
+    Default: ""
 Conditions:
   Deploy: !Not [!Equals [!Ref IsAutomatedTest, 'yes']]
+  IsCodePipelineS3BucketEmpty:  !Equals [!Ref "CodePipelineS3BucketName", ""]
 Resources:
   AWSSecrets:
     Type: AWS::SecretsManager::Secret
@@ -381,6 +395,11 @@ Resources:
         - Arn: !Sub arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${CodePipelineImage}
           RoleArn: !GetAtt EventBridgeRole.Arn
           Id: codepipeline-CodePipelineImage
+  QSCodePipelineS3Bucket:
+    Type: AWS::S3::Bucket
+    Condition: IsCodePipelineS3BucketEmpty
+    Properties: 
+      BucketName: !Sub ${ProjectName}-codepipeline-bucket  
   CodePipelineServiceRole:
     Type: AWS::IAM::Role
     Properties:
@@ -415,8 +434,8 @@ Resources:
                   - s3:PutObjectAcl
                   - s3:PutObject
                 Resource:
-                  - !Sub arn:${AWS::Partition}:s3:::${QSS3BucketName}
-                  - !Sub arn:${AWS::Partition}:s3:::${QSS3BucketName}/*
+                  - !If [IsCodePipelineS3BucketEmpty, !Sub 'arn:${AWS::Partition}:s3:::${QSCodePipelineS3Bucket}', !Sub 'arn:${AWS::Partition}:s3:::${CodePipelineS3BucketName}']
+                  - !If [IsCodePipelineS3BucketEmpty, !Sub 'arn:${AWS::Partition}:s3:::${QSCodePipelineS3Bucket}/*', !Sub 'arn:${AWS::Partition}:s3:::${CodePipelineS3BucketName}/*']
               - Effect: Allow
                 Action:
                   - codebuild:BatchGetBuilds
@@ -429,7 +448,7 @@ Resources:
     Condition: Deploy
     Properties:
       ArtifactStore:
-        Location: !Ref QSS3BucketName
+        Location: !If [IsCodePipelineS3BucketEmpty, !Ref QSCodePipelineS3Bucket, !Ref CodePipelineS3BucketName]
         Type: S3
       Name: !Sub ${ProjectName}-CodePipeline
       RoleArn: !GetAtt CodePipelineServiceRole.Arn
@@ -700,6 +719,12 @@ Outputs:
     Value: !Ref CodeBuildImageJob
     Export:
       Name: !Sub ${ProjectName}-CodeBuild-Job
+  QSCodePipelineS3Bucket:
+    Condition: IsCodePipelineS3BucketEmpty
+    Description: Code Pipeline S3 Bucket.
+    Value: !Ref QSCodePipelineS3Bucket
+    Export:
+      Name: !Sub ${ProjectName}-codepipeline-bucket
   CodePipelineServiceRole:
     Description: Code Pipeline Service Role.
     Value: !Ref CodePipelineServiceRole
